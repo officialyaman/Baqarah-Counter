@@ -3,20 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Baqarah Counter</title>
+  <title>Baqarah Counter 🌙</title>
 
-  <!-- Tailwind + Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
   <style>
     body { background:#f0f4f0; font-family: ui-sans-serif, system-ui, -apple-system, "Inter", Segoe UI, Roboto, Arial; }
-    .gold { color:#D4AF37; }
+    .ramadan-gold { color:#D4AF37; }
     .bg-islamic-green { background:#006400; }
     .no-scrollbar::-webkit-scrollbar{ display:none; }
     .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
 
-    /* Print/PDF mode: show only PDF page */
     @media print {
       nav, #menu, #lockdownBanner, #countdownCard, #homeGrid, #countingPage, #adminPage, #authModal, #toast {
         display:none !important;
@@ -34,7 +32,7 @@
   <nav class="bg-islamic-green text-white p-4 shadow-lg flex justify-between items-center sticky top-0 z-40">
     <div class="flex items-center gap-2">
       <i class="fa-solid fa-book-quran text-white/90"></i>
-      <h1 id="navTitle" class="text-xl font-bold italic">Baqarah Counter</h1>
+      <h1 id="navTitle" class="text-xl font-bold italic">Baqarah Counter 🌙</h1>
     </div>
 
     <div class="flex items-center gap-3">
@@ -45,7 +43,6 @@
         </button>
       </div>
 
-      <!-- 3-line menu -->
       <button id="menuBtn"
         class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/15 flex items-center justify-center"
         aria-label="Menu" title="Menu">
@@ -54,8 +51,8 @@
     </div>
   </nav>
 
-  <!-- MENU DROPDOWN -->
-  <div id="menu" class="hidden fixed top-[72px] right-4 w-[260px] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
+  <!-- MENU -->
+  <div id="menu" class="hidden fixed top-[72px] right-4 w-[240px] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
     <div class="p-3 border-b border-gray-100">
       <p class="text-xs text-gray-500">Navigation</p>
       <p id="menuHint" class="text-sm font-semibold text-gray-800">Login to start</p>
@@ -94,13 +91,13 @@
     </button>
   </div>
 
-  <!-- LOCKDOWN BANNER -->
+  <!-- LOCKDOWN -->
   <div id="lockdownBanner" class="hidden max-w-4xl mx-auto mt-6 px-4">
     <div class="bg-white border border-gray-100 rounded-3xl shadow-sm p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <p class="text-sm font-extrabold text-red-700">Event has started — Read-only mode (Members)</p>
+        <p class="text-sm font-extrabold text-red-700">Event has started — Members are read-only</p>
         <p class="text-gray-600 text-sm">
-          Members can’t login, sign up, count, or edit. Admin can still manage everything.
+          Members can’t login/sign up/count anymore. Admin can still manage everything.
         </p>
       </div>
       <button onclick="openPdfViewAndPrint()" class="bg-green-700 hover:bg-green-800 text-white px-5 py-3 rounded-2xl font-bold">
@@ -109,7 +106,7 @@
     </div>
   </div>
 
-  <!-- COUNTDOWN CARD -->
+  <!-- COUNTDOWN -->
   <div id="countdownCard" class="max-w-4xl mx-auto mt-10 text-center p-6 bg-white rounded-3xl shadow-sm border border-gray-100">
     <h2 id="countdownTitle" class="text-3xl font-bold text-gray-800 mb-4">Days till: Ramadan 2026</h2>
 
@@ -135,13 +132,13 @@
     <p id="targetLabel" class="mt-4 text-sm text-gray-500"></p>
   </div>
 
-  <!-- HOME GRID -->
+  <!-- HOME -->
   <div id="homeGrid" class="max-w-4xl mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 px-4">
 
-    <!-- Today's Progress -->
+    <!-- Progress -->
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
       <h3 class="text-xl font-bold mb-4 text-gray-700">
-        <i class="fa-solid fa-book-quran gold"></i>
+        <i class="fa-solid fa-book-quran ramadan-gold"></i>
         Today's Progress
       </h3>
 
@@ -169,7 +166,7 @@
       </div>
 
       <div id="lockedPromptHome" class="hidden text-center py-10">
-        <p class="text-gray-500 mb-4">Read-only mode is active for members.</p>
+        <p class="text-gray-500 mb-4">Members are read-only now.</p>
         <button onclick="openPdfViewAndPrint()" class="text-green-700 font-bold underline">Save as PDF</button>
       </div>
     </div>
@@ -177,7 +174,7 @@
     <!-- Leaderboard -->
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
       <h3 id="leaderboardTitle" class="text-xl font-bold mb-4 text-gray-700">
-        <i class="fa-solid fa-trophy gold"></i>
+        <i class="fa-solid fa-trophy ramadan-gold"></i>
         Global Leaderboard
       </h3>
 
@@ -198,11 +195,11 @@
     </div>
   </div>
 
-  <!-- COUNTING PAGE -->
+  <!-- COUNTING -->
   <div id="countingPage" class="hidden max-w-4xl mx-auto mt-8 px-4">
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
       <h3 class="text-xl font-bold mb-4 text-gray-700">
-        <i class="fa-solid fa-check gold"></i> Counting
+        <i class="fa-solid fa-check ramadan-gold"></i> Counting
       </h3>
 
       <div id="countingGuest" class="text-center py-10">
@@ -211,7 +208,7 @@
       </div>
 
       <div id="countingLocked" class="hidden text-center py-10">
-        <p class="text-gray-500 mb-4">Read-only mode is active for members.</p>
+        <p class="text-gray-500 mb-4">Members are read-only now.</p>
         <button onclick="openPdfViewAndPrint()" class="text-green-700 font-bold underline">Save as PDF</button>
       </div>
 
@@ -226,11 +223,10 @@
           <p id="countOrdinal" class="text-lg font-extrabold text-green-900">—</p>
         </div>
 
-        <!-- Qur’an preview -->
         <div class="mt-6 border border-gray-100 rounded-3xl overflow-hidden">
           <div class="p-4 bg-gray-50 flex items-center justify-between">
             <div class="font-bold text-gray-700">
-              <i class="fa-solid fa-book-quran gold"></i>
+              <i class="fa-solid fa-book-quran ramadan-gold"></i>
               <span id="quranTitle">Quran Pages</span>
             </div>
             <div id="pageIndicator" class="text-sm text-gray-500 font-semibold">—</div>
@@ -245,7 +241,7 @@
             </div>
 
             <p class="mt-4 text-xs text-gray-400">
-              Put images named 001.jpg … 450.jpg in a folder (example: quran-pages). Admin controls the template + range.
+              Images must be inside <b>quran-pages</b> and named like <b>001.jpg</b>, <b>002.jpg</b> ...
             </p>
           </div>
         </div>
@@ -254,31 +250,31 @@
     </div>
   </div>
 
-  <!-- ADMIN PAGE -->
+  <!-- ADMIN -->
   <div id="adminPage" class="hidden max-w-4xl mx-auto mt-8 px-4">
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
       <h3 class="text-xl font-bold mb-2 text-gray-700">
-        <i class="fa-solid fa-lock gold"></i> Admin Panel
+        <i class="fa-solid fa-lock ramadan-gold"></i> Admin Panel
       </h3>
       <p class="text-gray-500 mb-6">
-        Admin can manage everything (even after event start). Members become read-only after the target date.
+        Admin can always edit settings and users (even after event starts).
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- App / Event / Leaderboard settings -->
+        <!-- Settings -->
         <div class="border border-gray-100 rounded-3xl p-5">
           <h4 class="font-extrabold text-gray-800 mb-2">Top Bar + Countdown</h4>
 
           <label class="block text-xs font-bold text-gray-500 mt-3">App name</label>
-          <input id="appNameInput" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="Baqarah Counter">
+          <input id="appNameInput" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="Baqarah Counter 🌙">
 
-          <label class="block text-xs font-bold text-gray-500 mt-3">Days till: (freeform)</label>
-          <input id="eventNameInput" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="Ramadan / Eid / Anything">
+          <label class="block text-xs font-bold text-gray-500 mt-3">Days till:</label>
+          <input id="eventNameInput" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="Ramadan 2026">
 
           <label class="block text-xs font-bold text-gray-500 mt-3">Target date/time</label>
           <input id="targetInput" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="YYYY-MM-DD HH:MM:SS">
 
-          <label class="block text-xs font-bold text-gray-500 mt-3">Show leaderboard to members</label>
+          <label class="block text-xs font-bold text-gray-500 mt-3">Show leaderboard</label>
           <div class="mt-2 flex items-center justify-between bg-gray-50 border border-gray-100 rounded-2xl p-4">
             <p class="text-sm text-gray-700 font-semibold">Leaderboard Visible</p>
             <label class="inline-flex items-center cursor-pointer">
@@ -289,29 +285,29 @@
             </label>
           </div>
 
-          <label class="block text-xs font-bold text-gray-500 mt-3">Top N (how many people)</label>
+          <label class="block text-xs font-bold text-gray-500 mt-3">Top N</label>
           <input id="topNInput" class="w-full border p-3 rounded-xl focus:outline-green-600" inputmode="numeric" placeholder="10">
 
-          <button id="saveTopBtn" onclick="saveTopSettings()" class="mt-4 w-full bg-islamic-green text-white py-3 rounded-2xl font-bold hover:opacity-95">
+          <button onclick="saveTopSettings()" class="mt-4 w-full bg-islamic-green text-white py-3 rounded-2xl font-bold hover:opacity-95">
             Save
           </button>
         </div>
 
-        <!-- Qur’an pages settings -->
+        <!-- Quran -->
         <div class="border border-gray-100 rounded-3xl p-5">
           <h4 class="font-extrabold text-gray-800 mb-2">Qur’an Pages</h4>
 
-          <label class="block text-xs font-bold text-gray-500 mt-3">Preview title (freeform)</label>
+          <label class="block text-xs font-bold text-gray-500 mt-3">Preview title</label>
           <input id="qTitleInput" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="Quran Pages">
 
           <div class="grid grid-cols-2 gap-3 mt-3">
             <div>
               <label class="block text-xs font-bold text-gray-500">Start page</label>
-              <input id="startPageInput" class="w-full border p-3 rounded-xl focus:outline-green-600" inputmode="numeric" placeholder="1">
+              <input id="startPageInput" class="w-full border p-3 rounded-xl focus:outline-green-600" inputmode="numeric" placeholder="2">
             </div>
             <div>
               <label class="block text-xs font-bold text-gray-500">End page</label>
-              <input id="endPageInput" class="w-full border p-3 rounded-xl focus:outline-green-600" inputmode="numeric" placeholder="450">
+              <input id="endPageInput" class="w-full border p-3 rounded-xl focus:outline-green-600" inputmode="numeric" placeholder="49">
             </div>
           </div>
 
@@ -319,47 +315,49 @@
           <input id="templateInput" class="w-full border p-3 rounded-xl focus:outline-green-600"
                  placeholder="quran-pages/{page3}.jpg">
           <p class="text-xs text-gray-400 mt-2">
-            Use <code>{page3}</code> for 3-digit filenames like 001.jpg, 080.jpg, 450.jpg.
+            Use <code>{page}</code>, <code>{page2}</code>, or <code>{page3}</code>.
+            Example: <code>quran-pages/{page3}.jpg</code> → <code>quran-pages/002.jpg</code>
           </p>
 
-          <button id="saveQBtn" onclick="saveQuranSettings()" class="mt-4 w-full bg-islamic-green text-white py-3 rounded-2xl font-bold hover:opacity-95">
+          <button onclick="saveQuranSettings()" class="mt-4 w-full bg-islamic-green text-white py-3 rounded-2xl font-bold hover:opacity-95">
             Save
           </button>
         </div>
       </div>
 
-      <!-- Admin create new user -->
+      <!-- Create User -->
       <div class="mt-8 border border-gray-100 rounded-3xl p-5">
         <h4 class="font-extrabold text-gray-800 mb-3">Create New Account (Admin)</h4>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <input id="newUserU" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="Username">
-          <input id="newUserN" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="Display Name">
-          <input id="newUserP" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="Password" type="password">
-        </div>
-        <div class="mt-3 flex flex-col md:flex-row gap-3">
-          <select id="newUserRole" class="w-full border p-3 rounded-xl focus:outline-green-600">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <input id="newU" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="Username (unique)">
+          <input id="newN" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="Display Name">
+          <input id="newP" type="password" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="Password">
+          <select id="newR" class="w-full border p-3 rounded-xl focus:outline-green-600">
             <option value="Member">Member</option>
             <option value="Admin">Admin</option>
           </select>
-          <button onclick="adminCreateUser()" class="w-full bg-green-700 hover:bg-green-800 text-white py-3 rounded-2xl font-bold">
-            Create User
-          </button>
         </div>
-        <p class="text-xs text-gray-400 mt-2">Admin can create users anytime (even after event start).</p>
+
+        <div class="mt-3 flex items-center justify-between bg-gray-50 border border-gray-100 rounded-2xl p-4">
+          <p class="text-sm text-gray-700 font-semibold">Show on Leaderboard</p>
+          <label class="inline-flex items-center cursor-pointer">
+            <input id="newShow" type="checkbox" class="sr-only peer" checked>
+            <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-green-700 relative">
+              <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-all peer-checked:translate-x-5"></div>
+            </div>
+          </label>
+        </div>
+
+        <button onclick="adminCreateUser()"
+          class="mt-4 w-full bg-green-700 hover:bg-green-800 text-white py-3 rounded-2xl font-extrabold">
+          Create Account
+        </button>
       </div>
 
+      <!-- Users -->
       <div class="mt-8">
         <h4 class="font-extrabold text-gray-800 mb-3">Manage Users</h4>
         <div id="adminUsers" class="space-y-4"></div>
-
-        <div class="mt-6 flex flex-col sm:flex-row gap-3">
-          <button onclick="exportData()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-2xl font-bold transition">
-            Export Data (Copy JSON)
-          </button>
-          <button onclick="wipeAll()" class="w-full bg-red-50 hover:bg-red-100 text-red-700 py-3 rounded-2xl font-bold transition border border-red-200">
-            Wipe ALL Data
-          </button>
-        </div>
       </div>
     </div>
   </div>
@@ -374,7 +372,6 @@
         </button>
       </div>
 
-      <!-- Mobile: Login then Sign Up under -->
       <div class="block md:hidden">
         <div class="border border-gray-100 rounded-2xl p-4">
           <h3 class="font-extrabold text-gray-800 mb-2">Login</h3>
@@ -392,7 +389,6 @@
         </div>
       </div>
 
-      <!-- Desktop: two columns -->
       <div class="hidden md:grid grid-cols-2 gap-4 mt-2">
         <div class="border border-gray-100 rounded-2xl p-4">
           <h3 class="font-extrabold text-gray-800 mb-2">Login</h3>
@@ -410,30 +406,23 @@
         </div>
       </div>
 
-      <p id="authLockMsg" class="hidden mt-4 text-sm text-red-700 font-bold">
-        Event has started — members can’t login/sign up. Admin can still login.
-      </p>
-
       <button onclick="closeAuthModal()" class="w-full mt-4 text-gray-400 text-sm">Cancel</button>
     </div>
   </div>
 
-  <!-- PDF PAGE (hidden normally; visible on print) -->
+  <!-- PDF PAGE -->
   <div id="pdfPage" class="hidden max-w-3xl mx-auto mt-10 px-6">
     <div class="print-card bg-white rounded-3xl shadow-sm p-8">
       <h1 class="text-2xl font-extrabold text-gray-900 mb-2" id="pdfGreeting">As-salaamu alaikum, Guest</h1>
       <p class="text-gray-600 mb-6" id="pdfEventLine">—</p>
-
       <div id="pdfLeaderboardBlock" class="mt-6">
         <h2 class="text-lg font-extrabold text-gray-900 mb-3">Leaderboard</h2>
         <div id="pdfLeaderboard" class="space-y-2"></div>
       </div>
-
       <div id="pdfYourRankBlock" class="mt-6 bg-green-50 border border-green-100 rounded-2xl p-4">
         <p class="text-sm text-green-700 font-semibold">Your place</p>
         <p id="pdfYourRank" class="text-lg font-extrabold text-green-900">—</p>
       </div>
-
       <p class="mt-8 text-xs text-gray-400">Generated by Baqarah Counter (Print / Save as PDF)</p>
     </div>
   </div>
@@ -453,29 +442,29 @@ const ADMIN_PASSWORD = "Admin0000";
 /* ======================
    Storage Keys
 ====================== */
-const KEY_USERS = "baqarah_users_v1";
-const KEY_SESSION = "baqarah_session_v1";
-const KEY_SETTINGS = "baqarah_settings_v1";
+const KEY_USERS = "baq_users_v2";
+const KEY_SESSION = "baq_session_v2";
+const KEY_SETTINGS = "baq_settings_v2";
 
 /* ======================
    Default Settings
 ====================== */
 const defaultSettings = {
-  appName: "Baqarah Counter",
+  appName: "Baqarah Counter 🌙",
   eventName: "Ramadan 2026",
   targetDateTime: "2026-02-18 00:00:00",
+
   showLeaderboard: true,
   topN: 10,
 
-  // Qur’an preview (your images are 001.jpg...450.jpg)
   quranPreviewTitle: "Quran Pages",
-<<<<<<<< HEAD:docs/index.html
-  startPage: 1,
-  endPage: 604,
-========
   startPage: 2,
   endPage: 49,
->>>>>>>> d754786752341425c1e37110f2140f23f8552b9a:index.html
+
+  /* IMPORTANT FIX:
+     Your files are: quran-pages/001.jpg, 002.jpg ...
+     So template must NOT have "page" in it.
+  */
   pageTemplate: "quran-pages/{page3}.jpg"
 };
 
@@ -508,9 +497,7 @@ function toast(msg){
 }
 
 function escapeHTML(str){
-  return String(str)
-    .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  return String(str).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
 }
 
 async function sha256(text){
@@ -524,7 +511,6 @@ function yesterdayISO(){
   const d = new Date(); d.setDate(d.getDate()-1);
   return d.toISOString().split("T")[0];
 }
-
 function ordinal(n){
   const s=["th","st","nd","rd"], v=n%100;
   return n + (s[(v-20)%10] || s[v] || s[0]);
@@ -549,43 +535,46 @@ function getCurrentUser(){
   return u || null;
 }
 
-function isAdmin(){
-  const u = getCurrentUser();
-  return !!(u && u.role === "Admin");
+function isEventLocked(){
+  const settings = loadSettings();
+  const target = parseTargetDateTime(settings.targetDateTime);
+  return Date.now() >= target;
 }
 
-/* Members locked after event start, Admin NOT locked */
-function isMemberLocked(){
+/* Members become read-only after event starts.
+   Admin can still do everything. */
+function memberLocked(){
+  const me = getCurrentUser();
+  if(me && me.role === "Admin") return false;
+  return isEventLocked();
+}
+
+function getRecitationLabel(){
   const s = loadSettings();
-  const target = parseTargetDateTime(s.targetDateTime);
-  return Date.now() >= target && !isAdmin();
+  return (s.quranPreviewTitle || "Quran Pages").trim();
 }
 
 /* ======================
-   Ensure Admin User Exists
+   Ensure Admin Exists
 ====================== */
 async function ensureAdmin(){
   const users = loadUsers();
-  const adminHash = await sha256(ADMIN_PASSWORD);
-
   if(!users[ADMIN_USERNAME]){
     users[ADMIN_USERNAME] = {
       username: ADMIN_USERNAME,
       displayName: "Admin",
-      passHash: adminHash,
+      passHash: await sha256(ADMIN_PASSWORD),
       totalDays: 0,
       streak: 0,
       lastDone: null,
       role: "Admin",
-      hideFromLeaderboard: false,
+      showOnLeaderboard: false,
       createdAt: Date.now()
     };
     saveUsers(users);
   } else {
-    // Force role + keep existing password unless empty
     users[ADMIN_USERNAME].role = "Admin";
-    if(!users[ADMIN_USERNAME].passHash) users[ADMIN_USERNAME].passHash = adminHash;
-    if(users[ADMIN_USERNAME].hideFromLeaderboard === undefined) users[ADMIN_USERNAME].hideFromLeaderboard = false;
+    if(typeof users[ADMIN_USERNAME].showOnLeaderboard !== "boolean") users[ADMIN_USERNAME].showOnLeaderboard = false;
     saveUsers(users);
   }
 }
@@ -622,7 +611,8 @@ function showSection(which){
     renderQuran(false);
     window.scrollTo({top: countingPage.offsetTop - 80, behavior:"smooth"});
   } else if(which === "admin"){
-    if(!isAdmin()){ toast("Admins only."); return; }
+    const u = getCurrentUser();
+    if(!u || u.role !== "Admin"){ toast("Admins only."); return; }
     homeGrid.classList.add("hidden");
     adminPage.classList.remove("hidden");
     fillAdminInputs();
@@ -640,9 +630,7 @@ function showSection(which){
    Auth Modal
 ====================== */
 function openAuthModal(){
-  const locked = isMemberLocked();
-  const msg = document.getElementById("authLockMsg");
-  msg.classList.toggle("hidden", !locked);
+  // If memberLocked, only Admin login should still be possible.
   document.getElementById("authModal").classList.remove("hidden");
 }
 function closeAuthModal(){ document.getElementById("authModal").classList.add("hidden"); }
@@ -652,9 +640,7 @@ window.addEventListener("keydown",(e)=>{ if(e.key==="Escape") closeAuthModal(); 
    Signup / Login / Logout
 ====================== */
 async function signup(username, displayName, password){
-  // Members blocked after event start; admin can still create from Admin panel anyway
-  if(isMemberLocked()) return toast("Event started. Members can't sign up.");
-
+  if(memberLocked()) return toast("Event started: members can’t sign up now.");
   username = (username||"").trim();
   displayName = (displayName||"").trim();
   password = (password||"").trim();
@@ -672,7 +658,7 @@ async function signup(username, displayName, password){
     streak: 0,
     lastDone: null,
     role: "Member",
-    hideFromLeaderboard: false,
+    showOnLeaderboard: true,
     createdAt: Date.now()
   };
   saveUsers(users);
@@ -681,8 +667,6 @@ async function signup(username, displayName, password){
 }
 
 async function login(username, password){
-  // Members blocked after event start, Admin still allowed
-  const locked = isMemberLocked();
   username = (username||"").trim();
   password = (password||"").trim();
   if(!username || !password) return toast("Enter username & password.");
@@ -691,11 +675,11 @@ async function login(username, password){
   const u = users[username];
   if(!u) return toast("User not found.");
 
-  // If locked and NOT admin username → block
-  if(locked && username !== ADMIN_USERNAME) return toast("Event started. Members can't login.");
-
   const h = await sha256(password);
   if(h !== u.passHash) return toast("Wrong password.");
+
+  // Allow Admin login always, allow member login only if not locked
+  if(u.role !== "Admin" && memberLocked()) return toast("Event started: members can’t login now.");
 
   saveSession({username});
   closeAuthModal();
@@ -709,7 +693,6 @@ function logout(){
   renderAll();
 }
 
-/* Modal wiring */
 function signupDesktop(){ signup(suUser.value, suName.value, suPass.value); }
 function loginDesktop(){ login(loginUser.value, loginPass.value); }
 function signupMobile(){ signup(suUser_m.value, suName_m.value, suPass_m.value); }
@@ -749,14 +732,14 @@ function updateCountdown(){
 function alreadyDoneToday(u){ return u.lastDone === todayISO(); }
 
 function markAsDone(){
-  if(isMemberLocked()) return toast("Read-only mode (members).");
-  const sess = loadSession();
-  if(!sess.username) return toast("Login first.");
+  // Members read-only after event start; Admin can still do it.
+  const me = getCurrentUser();
+  if(!me) return toast("Login first.");
+  if(me.role !== "Admin" && memberLocked()) return toast("Event started: members are read-only.");
 
   const users = loadUsers();
-  const u = users[sess.username];
+  const u = users[me.username];
   if(!u) return toast("User missing.");
-
   if(alreadyDoneToday(u)) return toast("Already completed today.");
 
   if(u.lastDone === yesterdayISO()) u.streak = (u.streak||0) + 1;
@@ -765,7 +748,7 @@ function markAsDone(){
   u.totalDays = (u.totalDays||0) + 1;
   u.lastDone = todayISO();
 
-  users[sess.username] = u;
+  users[me.username] = u;
   saveUsers(users);
 
   toast("Saved ✅");
@@ -773,10 +756,13 @@ function markAsDone(){
 }
 
 /* ======================
-   Leaderboard + rank
+   Leaderboard
 ====================== */
 function getSortedUsers(){
-  const users = Object.values(loadUsers()).filter(u=>u && u.username && !u.hideFromLeaderboard);
+  const users = Object.values(loadUsers())
+    .filter(u=>u && u.username)
+    .filter(u => u.showOnLeaderboard !== false); // default true
+
   users.sort((a,b)=>
     (b.totalDays||0) - (a.totalDays||0) ||
     (b.streak||0) - (a.streak||0) ||
@@ -808,17 +794,14 @@ function renderLeaderboard(){
     );
   }
 
-  // Hide list if admin disabled (members) - Admin still sees list always
-  const shouldHideForThisUser = (!isAdmin() && !show);
-
-  document.getElementById("leaderboardHiddenMsg").classList.toggle("hidden", !shouldHideForThisUser);
-  document.getElementById("leaderboardList").classList.toggle("hidden", shouldHideForThisUser);
-  document.getElementById("searchBox").classList.toggle("hidden", shouldHideForThisUser);
+  document.getElementById("leaderboardHiddenMsg").classList.toggle("hidden", show);
+  document.getElementById("leaderboardList").classList.toggle("hidden", !show);
+  document.getElementById("searchBox").classList.toggle("hidden", !show);
 
   document.getElementById("leaderboardTitle").innerHTML =
-    `<i class="fa-solid fa-trophy gold"></i> Global Leaderboard (Top ${topN})`;
+    `<i class="fa-solid fa-trophy ramadan-gold"></i> Global Leaderboard (Top ${topN})`;
 
-  if(shouldHideForThisUser){
+  if(!show){
     document.getElementById("leaderboardList").innerHTML = "";
   } else {
     const html = top.map((u,i)=>{
@@ -849,7 +832,6 @@ function renderLeaderboard(){
       html || `<p class="text-gray-400 text-center py-4 italic">No matches.</p>`;
   }
 
-  // Your rank box (only when logged in)
   const me = getCurrentUser();
   const box = document.getElementById("yourRankBox");
   const text = document.getElementById("yourRankText");
@@ -872,16 +854,18 @@ function renderLeaderboard(){
 }
 
 /* ======================
-   Qur’an Preview (images 001.jpg etc)
+   Qur’an Preview
 ====================== */
 let currentPage = null;
 
-function pad3(n){ return String(n).padStart(3,"0"); }
+function pad(n, digits){ return String(n).padStart(digits,"0"); }
 function pagesPerView(){ return window.matchMedia("(min-width: 768px)").matches ? 2 : 1; }
 
 function buildPageSrc(template, pageNum){
-  // Only need {page3} for your naming style
-  return template.replaceAll("{page3}", pad3(pageNum));
+  return template
+    .replaceAll("{page3}", pad(pageNum,3))
+    .replaceAll("{page2}", pad(pageNum,2))
+    .replaceAll("{page}", String(pageNum));
 }
 
 function clampPage(p, s){
@@ -918,7 +902,7 @@ function renderQuran(reset=false){
       <div class="border border-gray-100 rounded-2xl overflow-hidden bg-gray-50">
         <div class="px-3 py-2 text-xs font-bold text-gray-600 flex justify-between items-center">
           <span>Page ${p}</span>
-          <span class="text-gray-400">${escapeHTML(src)}</span>
+          <span class="text-[10px] text-gray-400">${escapeHTML(src)}</span>
         </div>
         <div class="bg-white">
           <img src="${src}" alt="Page ${p}"
@@ -964,11 +948,12 @@ function wireSwipe(){
 }
 
 /* ======================
-   Admin: settings + users
+   Admin
 ====================== */
-function adminGuard(){
-  if(!isAdmin()) return {ok:false, msg:"Admins only."};
-  return {ok:true, msg:"ok"};
+function requireAdmin(){
+  const me = getCurrentUser();
+  if(!me || me.role !== "Admin") { toast("Admins only."); return null; }
+  return me;
 }
 
 function fillAdminInputs(){
@@ -986,8 +971,7 @@ function fillAdminInputs(){
 }
 
 function saveTopSettings(){
-  const g = adminGuard();
-  if(!g.ok) return toast(g.msg);
+  if(!requireAdmin()) return;
 
   const s = loadSettings();
   s.appName = (appNameInput.value || "").trim() || defaultSettings.appName;
@@ -1004,8 +988,7 @@ function saveTopSettings(){
 }
 
 function saveQuranSettings(){
-  const g = adminGuard();
-  if(!g.ok) return toast(g.msg);
+  if(!requireAdmin()) return;
 
   const s = loadSettings();
   s.quranPreviewTitle = (qTitleInput.value || "").trim() || defaultSettings.quranPreviewTitle;
@@ -1027,15 +1010,17 @@ function saveQuranSettings(){
 }
 
 async function adminCreateUser(){
-  const g = adminGuard();
-  if(!g.ok) return toast(g.msg);
+  if(!requireAdmin()) return;
 
-  const username = (newUserU.value||"").trim();
-  const displayName = (newUserN.value||"").trim();
-  const password = (newUserP.value||"").trim();
-  const role = (newUserRole.value === "Admin") ? "Admin" : "Member";
+  const username = (newU.value||"").trim();
+  const displayName = (newN.value||"").trim();
+  const password = (newP.value||"").trim();
+  const role = newR.value === "Admin" ? "Admin" : "Member";
+  const showOnLeaderboard = !!newShow.checked;
 
   if(!username || !displayName || !password) return toast("Fill all fields.");
+  if(username.length < 3) return toast("Username too short.");
+
   const users = loadUsers();
   if(users[username]) return toast("Username already exists.");
 
@@ -1047,19 +1032,18 @@ async function adminCreateUser(){
     streak: 0,
     lastDone: null,
     role,
-    hideFromLeaderboard: false,
+    showOnLeaderboard,
     createdAt: Date.now()
   };
   saveUsers(users);
 
-  newUserU.value = ""; newUserN.value = ""; newUserP.value = "";
-  toast("User created.");
+  newU.value = ""; newN.value = ""; newP.value = ""; newR.value = "Member"; newShow.checked = true;
+  toast("Account created.");
   renderAll();
 }
 
 async function adminSetPassword(username, newPass){
-  const g = adminGuard();
-  if(!g.ok) return toast(g.msg);
+  if(!requireAdmin()) return;
 
   newPass = (newPass||"").trim();
   if(newPass.length < 4) return toast("Password too short.");
@@ -1069,11 +1053,44 @@ async function adminSetPassword(username, newPass){
   users[username].passHash = await sha256(newPass);
   saveUsers(users);
   toast("Password updated.");
+  renderAll();
+}
+
+function adminSetShow(username, checked){
+  if(!requireAdmin()) return;
+  const users = loadUsers();
+  if(!users[username]) return toast("User not found.");
+  users[username].showOnLeaderboard = !!checked;
+  saveUsers(users);
+  toast("Updated.");
+  renderAll();
+}
+
+function adminRenameUser(oldUsername, newUsername){
+  if(!requireAdmin()) return;
+  newUsername = (newUsername||"").trim();
+  if(newUsername.length < 3) return toast("New username too short.");
+
+  const users = loadUsers();
+  if(!users[oldUsername]) return toast("User not found.");
+  if(users[newUsername]) return toast("That username already exists.");
+
+  const obj = users[oldUsername];
+  delete users[oldUsername];
+  obj.username = newUsername;
+  users[newUsername] = obj;
+
+  // If renamed user is logged in, update session
+  const sess = loadSession();
+  if(sess.username === oldUsername) saveSession({username:newUsername});
+
+  saveUsers(users);
+  toast("Username changed.");
+  renderAll();
 }
 
 function adminDeleteUser(username){
-  const g = adminGuard();
-  if(!g.ok) return toast(g.msg);
+  if(!requireAdmin()) return;
   if(username === ADMIN_USERNAME) return toast("Can't delete main admin.");
 
   const users = loadUsers();
@@ -1088,24 +1105,19 @@ function adminDeleteUser(username){
 }
 
 function adminAdjustDays(username, delta){
-  const g = adminGuard();
-  if(!g.ok) return toast(g.msg);
-
+  if(!requireAdmin()) return;
   const users = loadUsers();
   const x = users[username];
   if(!x) return toast("User not found.");
   x.totalDays = Math.max(0, (x.totalDays||0) + delta);
   users[username] = x;
   saveUsers(users);
-
   toast("Days updated.");
   renderAll();
 }
 
 function adminSetDays(username, days){
-  const g = adminGuard();
-  if(!g.ok) return toast(g.msg);
-
+  if(!requireAdmin()) return;
   const n = Number(days);
   if(Number.isNaN(n) || n < 0) return toast("Enter valid days.");
 
@@ -1121,8 +1133,7 @@ function adminSetDays(username, days){
 }
 
 function adminSetRole(username, role){
-  const g = adminGuard();
-  if(!g.ok) return toast(g.msg);
+  if(!requireAdmin()) return;
   if(username === ADMIN_USERNAME) return toast("Main admin role locked.");
 
   const users = loadUsers();
@@ -1137,53 +1148,10 @@ function adminSetRole(username, role){
   renderAll();
 }
 
-function adminToggleHide(username, val){
-  const g = adminGuard();
-  if(!g.ok) return toast(g.msg);
-
-  const users = loadUsers();
-  const u = users[username];
-  if(!u) return toast("User not found.");
-  u.hideFromLeaderboard = !!val;
-  users[username] = u;
-  saveUsers(users);
-
-  toast("Updated.");
-  renderAll();
-}
-
-function adminRenameUsername(oldUsername, newUsername){
-  const g = adminGuard();
-  if(!g.ok) return toast(g.msg);
-
-  oldUsername = (oldUsername||"").trim();
-  newUsername = (newUsername||"").trim();
-  if(!oldUsername || !newUsername) return toast("Enter username.");
-  if(oldUsername === ADMIN_USERNAME) return toast("Can't rename main admin.");
-  if(newUsername.length < 3) return toast("New username too short.");
-
-  const users = loadUsers();
-  if(!users[oldUsername]) return toast("Old user not found.");
-  if(users[newUsername]) return toast("New username already exists.");
-
-  const u = users[oldUsername];
-  delete users[oldUsername];
-
-  u.username = newUsername;
-  users[newUsername] = u;
-
-  // If session was old user, move session
-  const sess = loadSession();
-  if(sess.username === oldUsername) saveSession({username:newUsername});
-
-  saveUsers(users);
-  toast("Username changed.");
-  renderAll();
-}
-
 function renderAdminUsers(){
   const wrap = document.getElementById("adminUsers");
-  if(!isAdmin()){
+  const me = getCurrentUser();
+  if(!me || me.role !== "Admin"){
     wrap.innerHTML = `<p class="text-gray-400 italic">Admins only.</p>`;
     return;
   }
@@ -1194,7 +1162,7 @@ function renderAdminUsers(){
   wrap.innerHTML = list.map(user=>{
     const isMain = user.username === ADMIN_USERNAME;
     const uname = escapeHTML(user.username);
-    const oldU = user.username;
+    const showLB = (user.showOnLeaderboard !== false);
 
     return `
       <div class="border border-gray-100 rounded-3xl p-4">
@@ -1206,24 +1174,42 @@ function renderAdminUsers(){
               <span class="ml-2 text-xs font-extrabold px-2 py-1 rounded-full ${user.role==="Admin" ? "bg-red-50 text-red-700 border border-red-200" : "bg-gray-50 text-gray-700 border border-gray-200"}">
                 ${user.role || "Member"}
               </span>
-              ${user.hideFromLeaderboard ? `<span class="ml-2 text-xs font-extrabold px-2 py-1 rounded-full bg-gray-50 text-gray-600 border border-gray-200">Hidden</span>` : ``}
             </div>
             <div class="text-xs text-gray-500 mt-1">
-              Total: <b class="text-green-700">${user.totalDays||0}</b>
-              • Streak: <b class="text-green-700">${user.streak||0}</b>
-              • Last: <b>${user.lastDone||"—"}</b>
+              Total: <b class="text-green-700">${user.totalDays||0}</b> • Streak: <b class="text-green-700">${user.streak||0}</b> • Last: <b>${user.lastDone||"—"}</b>
             </div>
           </div>
-
           ${isMain ? `` : `
-            <button onclick="adminDeleteUser('${escapeHTML(oldU)}')"
+            <button onclick="adminDeleteUser('${uname}')"
               class="shrink-0 text-sm font-extrabold px-3 py-2 rounded-2xl bg-red-50 text-red-700 border border-red-200 hover:bg-red-100">
               Delete
             </button>
           `}
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+
+          <div>
+            <label class="block text-xs font-bold text-gray-500 mb-1">Show on Leaderboard</label>
+            <div class="flex items-center justify-between bg-gray-50 border border-gray-100 rounded-2xl p-4">
+              <span class="text-sm font-semibold text-gray-700">${showLB ? "Visible" : "Hidden"}</span>
+              <label class="inline-flex items-center cursor-pointer">
+                <input ${isMain ? "" : ""} type="checkbox" class="sr-only peer" ${showLB ? "checked" : ""} onchange="adminSetShow('${uname}', this.checked)">
+                <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-green-700 relative">
+                  <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-all peer-checked:translate-x-5"></div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-500 mb-1">Rename username</label>
+            <input id="rename_${uname}" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="New username">
+            <button ${isMain ? "disabled" : ""} onclick="adminRenameUser('${uname}', document.getElementById('rename_${uname}').value)"
+              class="mt-2 w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-2xl font-bold transition ${isMain ? "opacity-50 cursor-not-allowed" : ""}">
+              Rename
+            </button>
+          </div>
 
           <div>
             <label class="block text-xs font-bold text-gray-500 mb-1">Role</label>
@@ -1231,49 +1217,33 @@ function renderAdminUsers(){
               <option value="Member" ${user.role!=="Admin" ? "selected" : ""}>Member</option>
               <option value="Admin" ${user.role==="Admin" ? "selected" : ""}>Admin</option>
             </select>
-            <button ${isMain ? "disabled" : ""} onclick="adminSetRole('${escapeHTML(oldU)}', document.getElementById('role_${uname}').value)"
+            <button ${isMain ? "disabled" : ""} onclick="adminSetRole('${uname}', document.getElementById('role_${uname}').value)"
               class="mt-2 w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-2xl font-bold transition ${isMain ? "opacity-50 cursor-not-allowed" : ""}">
               Set Role
             </button>
-
-            <label class="block text-xs font-bold text-gray-500 mt-4 mb-1">Show on leaderboard</label>
-            <div class="flex items-center justify-between bg-gray-50 border border-gray-100 rounded-2xl p-3">
-              <span class="text-sm font-semibold text-gray-700">Visible</span>
-              <input type="checkbox"
-                ${user.hideFromLeaderboard ? "" : "checked"}
-                onchange="adminToggleHide('${escapeHTML(oldU)}', !this.checked)"
-                class="w-5 h-5 accent-green-700" />
-            </div>
           </div>
 
           <div>
             <label class="block text-xs font-bold text-gray-500 mb-1">New password</label>
             <input id="pw_${uname}" class="w-full border p-3 rounded-xl focus:outline-green-600" type="password" placeholder="Enter new password">
-            <button onclick="adminSetPassword('${escapeHTML(oldU)}', document.getElementById('pw_${uname}').value)"
+            <button onclick="adminSetPassword('${uname}', document.getElementById('pw_${uname}').value)"
               class="mt-2 w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-2xl font-bold transition">
               Change Password
             </button>
-
-            <label class="block text-xs font-bold text-gray-500 mt-4 mb-1">Rename username</label>
-            <input id="rename_${uname}" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="New username">
-            <button ${isMain ? "disabled" : ""} onclick="adminRenameUsername('${escapeHTML(oldU)}', document.getElementById('rename_${uname}').value)"
-              class="mt-2 w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-2xl font-bold transition ${isMain ? "opacity-50 cursor-not-allowed" : ""}">
-              Change Username
-            </button>
           </div>
 
-          <div>
+          <div class="md:col-span-2">
             <label class="block text-xs font-bold text-gray-500 mb-1">Set / Adjust Days</label>
-            <input id="set_${uname}" class="w-full border p-3 rounded-xl focus:outline-green-600" inputmode="numeric" placeholder="e.g. 15">
-            <div class="mt-2 grid grid-cols-5 gap-2">
-              <button onclick="adminSetDays('${escapeHTML(oldU)}', document.getElementById('set_${uname}').value)"
-                class="col-span-2 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-2xl font-bold transition">Set</button>
-              <button onclick="adminAdjustDays('${escapeHTML(oldU)}', 1)"
-                class="bg-green-50 hover:bg-green-100 text-green-800 py-3 rounded-2xl font-bold border border-green-200">+1</button>
-              <button onclick="adminAdjustDays('${escapeHTML(oldU)}', -1)"
-                class="bg-red-50 hover:bg-red-100 text-red-700 py-3 rounded-2xl font-bold border border-red-200">-1</button>
-              <button onclick="adminAdjustDays('${escapeHTML(oldU)}', 7)"
-                class="bg-green-50 hover:bg-green-100 text-green-800 py-3 rounded-2xl font-bold border border-green-200">+7</button>
+            <div class="grid grid-cols-1 sm:grid-cols-6 gap-2">
+              <input id="set_${uname}" class="sm:col-span-2 w-full border p-3 rounded-xl focus:outline-green-600" inputmode="numeric" placeholder="e.g. 15">
+              <button onclick="adminSetDays('${uname}', document.getElementById('set_${uname}').value)"
+                class="sm:col-span-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-2xl font-bold transition">Set</button>
+              <button onclick="adminAdjustDays('${uname}', 1)"
+                class="sm:col-span-1 bg-green-50 hover:bg-green-100 text-green-800 py-3 rounded-2xl font-bold border border-green-200">+1</button>
+              <button onclick="adminAdjustDays('${uname}', -1)"
+                class="sm:col-span-1 bg-red-50 hover:bg-red-100 text-red-700 py-3 rounded-2xl font-bold border border-red-200">-1</button>
+              <button onclick="adminAdjustDays('${uname}', 7)"
+                class="sm:col-span-1 bg-green-50 hover:bg-green-100 text-green-800 py-3 rounded-2xl font-bold border border-green-200">+7</button>
             </div>
           </div>
 
@@ -1283,46 +1253,25 @@ function renderAdminUsers(){
   }).join("");
 }
 
-async function exportData(){
-  const data = { settings: loadSettings(), users: loadUsers() };
-  const text = JSON.stringify(data, null, 2);
-  try{
-    await navigator.clipboard.writeText(text);
-    toast("Copied JSON.");
-  }catch{
-    prompt("Copy JSON:", text);
-  }
-}
-
-function wipeAll(){
-  if(!isAdmin()) return toast("Admins only.");
-  if(!confirm("Wipe ALL app data? This cannot be undone.")) return;
-  localStorage.removeItem(KEY_USERS);
-  localStorage.removeItem(KEY_SESSION);
-  localStorage.removeItem(KEY_SETTINGS);
-  location.reload();
-}
-
 /* ======================
-   PDF / Print
+   PDF
 ====================== */
 function buildPdfData(){
   const settings = loadSettings();
   const me = getCurrentUser();
   const name = me ? me.displayName : "Guest";
   const topN = Math.max(1, Number(settings.topN) || 10);
-
-  const showForPdf = isAdmin() ? settings.showLeaderboard : settings.showLeaderboard;
+  const show = !!settings.showLeaderboard;
 
   document.getElementById("pdfGreeting").textContent = `As-salaamu alaikum, ${name}`;
   document.getElementById("pdfEventLine").textContent = `Event: ${settings.eventName} • Target: ${settings.targetDateTime}`;
 
-  document.getElementById("pdfLeaderboardBlock").classList.toggle("hidden", !showForPdf);
+  document.getElementById("pdfLeaderboardBlock").classList.toggle("hidden", !show);
 
   const pdfList = document.getElementById("pdfLeaderboard");
   pdfList.innerHTML = "";
 
-  if(showForPdf){
+  if(show){
     const sorted = getSortedUsers();
     const top = sorted.slice(0, topN);
 
@@ -1346,7 +1295,7 @@ function buildPdfData(){
   const rankBlock = document.getElementById("pdfYourRankBlock");
   const rankText = document.getElementById("pdfYourRank");
 
-  if(me && !me.hideFromLeaderboard){
+  if(me){
     const rank = computeRank(me.username);
     if(rank !== null){
       const msg = (rank <= topN)
@@ -1362,59 +1311,46 @@ function buildPdfData(){
     rankBlock.classList.remove("hidden");
   }
 }
-
-function openPdfViewAndPrint(){
-  buildPdfData();
-  window.print();
-}
+function openPdfViewAndPrint(){ buildPdfData(); window.print(); }
 
 /* ======================
    Render UI
 ====================== */
-function getRecitationLabel(){
-  const s = loadSettings();
-  return (s.quranPreviewTitle || "Quran Pages").trim();
-}
-
 function renderAuthUI(){
   const settings = loadSettings();
   const me = getCurrentUser();
-  const locked = isMemberLocked();
 
   document.title = settings.appName;
   document.getElementById("navTitle").textContent = settings.appName;
 
-  // Lockdown banner shows when target passed
-  const targetPassed = Date.now() >= parseTargetDateTime(settings.targetDateTime);
-  document.getElementById("lockdownBanner").classList.toggle("hidden", !targetPassed);
+  const locked = memberLocked();
+  document.getElementById("lockdownBanner").classList.toggle("hidden", !locked);
 
-  // Auth buttons: hide if logged in; if locked, only allow Admin login
-  const isLoggedIn = !!me;
-  document.getElementById("authBtnTop").classList.toggle("hidden", isLoggedIn);
-  document.getElementById("authBtnMenu").classList.toggle("hidden", isLoggedIn);
-  document.getElementById("logoutBtn").classList.toggle("hidden", !isLoggedIn);
+  // buttons
+  const isAdmin = me && me.role === "Admin";
+  document.getElementById("authBtnTop").classList.toggle("hidden", !!me || locked);
+  document.getElementById("authBtnMenu").classList.toggle("hidden", !!me || locked);
+  document.getElementById("logoutBtn").classList.toggle("hidden", !me);
 
-  // Admin nav
   document.getElementById("adminNavBtn").classList.toggle("hidden", !(me && me.role === "Admin"));
 
-  // Menu hint
-  document.getElementById("menuHint").textContent = me ? `Logged in as ${me.displayName}` : (locked ? "Members read-only" : "Login to start");
+  document.getElementById("menuHint").textContent =
+    me ? `Logged in as ${me.displayName}` : (locked ? "Members read-only" : "Login to start");
 
   // Home blocks
   document.getElementById("guestPrompt").classList.toggle("hidden", !!me || locked);
-  document.getElementById("userStats").classList.toggle("hidden", !me || locked);
+  document.getElementById("userStats").classList.toggle("hidden", !me || (locked && !isAdmin));
   document.getElementById("lockedPromptHome").classList.toggle("hidden", !locked);
 
-  // Counting page blocks
+  // Counting blocks
   document.getElementById("countingGuest").classList.toggle("hidden", !!me || locked);
-  document.getElementById("countingUser").classList.toggle("hidden", !me || locked);
+  document.getElementById("countingUser").classList.toggle("hidden", !me || (locked && !isAdmin));
   document.getElementById("countingLocked").classList.toggle("hidden", !locked);
 
-  // Button label
   const label = getRecitationLabel();
   document.getElementById("quranTitle").textContent = label;
 
-  if(!me || locked) return;
+  if(!me) return;
 
   document.getElementById("displayName").textContent = me.displayName;
   document.getElementById("streakCount").textContent = me.streak || 0;
@@ -1422,9 +1358,15 @@ function renderAuthUI(){
   const done = alreadyDoneToday(me);
   const btns = [document.getElementById("markDoneBtn"), document.getElementById("countBtn")];
 
+  const canCount = (me.role === "Admin") || !memberLocked();
+
   btns.forEach(b=>{
     if(done){
       b.innerText = "Already Completed Today! ✨";
+      b.disabled = true;
+      b.className = "w-full bg-gray-300 text-gray-600 py-4 rounded-2xl font-bold cursor-not-allowed";
+    } else if(!canCount){
+      b.innerText = "Read-only (Event Started)";
       b.disabled = true;
       b.className = "w-full bg-gray-300 text-gray-600 py-4 rounded-2xl font-bold cursor-not-allowed";
     } else {
@@ -1455,27 +1397,22 @@ function renderAll(){
 }
 
 /* ======================
-   Wiring
+   Wiring + Boot
 ====================== */
 document.getElementById("searchBox").addEventListener("input", renderLeaderboard);
 window.addEventListener("resize", ()=> renderQuran(false));
 wireSwipe();
 
-/* ======================
-   Boot
-====================== */
 (async function boot(){
   const s = loadSettings();
   saveSettings(s);
   await ensureAdmin();
-
   updateCountdown();
   setInterval(updateCountdown, 1000);
-
   currentPage = loadSettings().startPage;
   renderAll();
 })();
-
 </script>
+
 </body>
 </html>
