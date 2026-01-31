@@ -1,469 +1,288 @@
-@ -0,0 +1,1381 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BaqarahStreak 🌙</title>
-
-  <!-- Tailwind + Icons -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Streak App</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
   <style>
-    body { background:#f0f4f0; font-family: ui-sans-serif, system-ui, -apple-system, "Inter", Segoe UI, Roboto, Arial; }
-    .ramadan-gold { color:#D4AF37; }
-    .bg-islamic-green { background:#006400; }
-    .no-scrollbar::-webkit-scrollbar{ display:none; }
-    .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
-
-    /* Print/PDF mode: show only PDF page */
-    @media print {
-      nav, #menu, #lockdownBanner, #countdownCard, #homeGrid, #countingPage, #adminPage, #authModal, #toast {
-        display:none !important;
-      }
-      #pdfPage { display:block !important; }
-      body { background:white !important; }
-      .print-card { border: 1px solid #e5e7eb !important; box-shadow:none !important; }
-    }
+    body{background:#f4f7f4}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.04)}
+    .btn{border-radius:14px;padding:.75rem 1rem;font-weight:800}
+    .input{border:1px solid #e5e7eb;border-radius:14px;padding:.75rem 1rem;width:100%}
+    .small{font-size:.85rem}
+    .badge{border-radius:999px;padding:.25rem .6rem;font-weight:800;font-size:.75rem}
   </style>
 </head>
 
-<body class="pb-10">
+<body class="pb-14">
+  <!-- Top Bar -->
+  <div class="sticky top-0 z-20 bg-green-900 text-white">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="font-extrabold text-lg" id="appTitle">BaqarahStreak 🌙</div>
 
-  <!-- NAV -->
-  <nav class="bg-islamic-green text-white p-4 shadow-lg flex justify-between items-center sticky top-0 z-40">
-    <div class="flex items-center gap-2">
-      <i class="fa-solid fa-book-quran text-white/90"></i>
-      <h1 id="navTitle" class="text-xl font-bold italic">BaqarahStreak 🌙</h1>
-    </div>
+      <div class="flex items-center gap-2">
+        <div id="whoBox" class="hidden small text-white/90"></div>
 
-    <div class="flex items-center gap-3">
-      <div id="authSection">
-        <button id="authBtnTop" onclick="openAuthModal()"
-          class="bg-white text-green-900 px-4 py-1 rounded-full text-sm font-semibold hover:bg-gray-100">
-          Login / Sign Up
-        </button>
+        <button id="loginBtnTop" class="btn bg-white text-green-900" onclick="openAuth()">Login / Sign Up</button>
+        <button id="logoutBtnTop" class="btn bg-white/10 text-white hidden" onclick="logout()">Logout</button>
+
+        <button class="btn bg-white/10 text-white" onclick="toggleMenu()" aria-label="Menu">☰</button>
       </div>
-
-      <!-- 3-line menu -->
-      <button id="menuBtn"
-        class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/15 flex items-center justify-center"
-        aria-label="Menu" title="Menu">
-        <i class="fa-solid fa-bars"></i>
-      </button>
     </div>
-  </nav>
+  </div>
 
-  <!-- MENU DROPDOWN -->
-  <div id="menu" class="hidden fixed top-[72px] right-4 w-[240px] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
-    <div class="p-3 border-b border-gray-100">
-      <p class="text-xs text-gray-500">Navigation</p>
-      <p id="menuHint" class="text-sm font-semibold text-gray-800">Login to start</p>
+  <!-- Menu -->
+  <div id="menu" class="hidden fixed right-4 top-[76px] w-[250px] card overflow-hidden z-30">
+    <div class="px-4 py-3 border-b border-gray-100">
+      <div class="text-xs text-gray-500">Navigation</div>
+      <div id="menuHint" class="font-extrabold">—</div>
     </div>
 
-    <button class="w-full text-left px-4 py-3 hover:bg-gray-50 flex justify-between items-center" onclick="showSection('home')">
-      <span class="font-semibold text-gray-700">Home</span>
-      <i class="fa-solid fa-house text-gray-400"></i>
-    </button>
-
-    <button class="w-full text-left px-4 py-3 hover:bg-gray-50 flex justify-between items-center" onclick="showSection('leaderboard')">
-      <span class="font-semibold text-gray-700">Leaderboard</span>
-      <i class="fa-solid fa-trophy text-gray-400"></i>
-    </button>
-
-    <button class="w-full text-left px-4 py-3 hover:bg-gray-50 flex justify-between items-center" onclick="showSection('counting')">
-      <span class="font-semibold text-gray-700">Counting</span>
-      <i class="fa-solid fa-check text-gray-400"></i>
-    </button>
-
-    <button id="adminNavBtn" class="hidden w-full text-left px-4 py-3 hover:bg-gray-50 flex justify-between items-center" onclick="showSection('admin')">
-      <span class="font-semibold text-gray-700">Admin</span>
-      <i class="fa-solid fa-lock text-gray-400"></i>
-    </button>
+    <button class="w-full text-left px-4 py-3 hover:bg-gray-50 font-bold" onclick="showView('home')">🏠 Home</button>
+    <button class="w-full text-left px-4 py-3 hover:bg-gray-50 font-bold" onclick="showView('leaderboard')">🏆 Leaderboard</button>
+    <button class="w-full text-left px-4 py-3 hover:bg-gray-50 font-bold" onclick="showView('counting')">✅ Counting</button>
+    <button id="adminMenuBtn" class="hidden w-full text-left px-4 py-3 hover:bg-gray-50 font-bold" onclick="showView('admin')">🔒 Admin</button>
 
     <div class="border-t border-gray-100"></div>
-
-    <button id="authBtnMenu" class="w-full text-left px-4 py-3 hover:bg-gray-50 flex justify-between items-center" onclick="openAuthModal()">
-      <span class="font-semibold text-green-800">Login / Sign Up</span>
-      <i class="fa-solid fa-right-to-bracket text-green-700"></i>
-    </button>
-
-    <button id="logoutBtn" class="hidden w-full text-left px-4 py-3 hover:bg-gray-50 flex justify-between items-center" onclick="logout()">
-      <span class="font-semibold text-red-600">Logout</span>
-      <i class="fa-solid fa-arrow-right-from-bracket text-red-500"></i>
-    </button>
+    <button id="loginBtnMenu" class="w-full text-left px-4 py-3 hover:bg-gray-50 font-bold text-green-800" onclick="openAuth()">Login / Sign Up</button>
+    <button id="logoutBtnMenu" class="hidden w-full text-left px-4 py-3 hover:bg-gray-50 font-bold text-red-600" onclick="logout()">Logout</button>
   </div>
 
-  <!-- LOCKDOWN BANNER -->
-  <div id="lockdownBanner" class="hidden max-w-4xl mx-auto mt-6 px-4">
-    <div class="bg-white border border-gray-100 rounded-3xl shadow-sm p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div>
-        <p class="text-sm font-extrabold text-red-700">Event has started — Read-only mode</p>
-        <p class="text-gray-600 text-sm">
-          Nobody can login, sign up, count, or edit anymore. You can only save your summary as PDF.
-        </p>
-      </div>
-      <button onclick="openPdfViewAndPrint()" class="bg-green-700 hover:bg-green-800 text-white px-5 py-3 rounded-2xl font-bold">
-        Save as PDF
-      </button>
-    </div>
-  </div>
+  <!-- Main -->
+  <div class="max-w-5xl mx-auto px-4 mt-6 space-y-6">
 
-  <!-- COUNTDOWN CARD -->
-  <div id="countdownCard" class="max-w-4xl mx-auto mt-10 text-center p-6 bg-white rounded-3xl shadow-sm border border-gray-100">
-    <h2 id="countdownTitle" class="text-3xl font-bold text-gray-800 mb-4">Days till: Ramadan 2026</h2>
-
-    <div id="countdown" class="grid grid-cols-4 gap-4 text-center">
-      <div class="bg-green-50 p-4 rounded-xl">
-        <span id="days" class="text-3xl md:text-4xl font-bold text-green-800">00</span>
-        <p class="text-xs uppercase text-green-600">Days</p>
-      </div>
-      <div class="bg-green-50 p-4 rounded-xl">
-        <span id="hours" class="text-3xl md:text-4xl font-bold text-green-800">00</span>
-        <p class="text-xs uppercase text-green-600">Hours</p>
-      </div>
-      <div class="bg-green-50 p-4 rounded-xl">
-        <span id="minutes" class="text-3xl md:text-4xl font-bold text-green-800">00</span>
-        <p class="text-xs uppercase text-green-600">Mins</p>
-      </div>
-      <div class="bg-green-50 p-4 rounded-xl">
-        <span id="seconds" class="text-3xl md:text-4xl font-bold text-green-800">00</span>
-        <p class="text-xs uppercase text-green-600">Secs</p>
-      </div>
-    </div>
-
-    <p id="targetLabel" class="mt-4 text-sm text-gray-500"></p>
-  </div>
-
-  <!-- HOME GRID -->
-  <div id="homeGrid" class="max-w-4xl mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 px-4">
-
-    <!-- Today's Progress -->
-    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-      <h3 class="text-xl font-bold mb-4 text-gray-700">
-        <i class="fa-solid fa-book-quran ramadan-gold"></i>
-        Today's Progress
-      </h3>
-
-      <div id="userStats" class="hidden">
-        <p class="mb-4 text-gray-600">
-          As-salaamu alaikum, <span id="displayName" class="font-bold text-green-700">User</span>!
-        </p>
-
-        <div class="bg-green-100 p-4 rounded-2xl mb-4 text-center">
-          <p class="text-sm text-green-800">Current Streak</p>
-          <p class="text-5xl font-black text-green-900" id="streakCount">0</p>
+    <!-- Countdown -->
+    <div class="card p-6">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <div class="text-2xl font-black text-gray-900" id="countTitle">Days till: Ramadan 2026</div>
+          <div class="text-gray-500 small" id="countTarget">Target: 2026-02-18 00:00:00</div>
         </div>
-
-        <button id="markDoneBtn" onclick="markAsDone()"
-          class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold hover:bg-green-700 transition">
-          I Completed Today
-        </button>
-
-        <p id="ordinalLine" class="mt-4 text-center text-sm font-bold text-green-800"></p>
-      </div>
-
-      <div id="guestPrompt" class="text-center py-10">
-        <p class="text-gray-500 mb-4">Please login to track your streak!</p>
-        <button onclick="openAuthModal()" class="text-green-600 font-bold underline">Login Now</button>
-      </div>
-
-      <div id="lockedPromptHome" class="hidden text-center py-10">
-        <p class="text-gray-500 mb-4">Read-only mode is active.</p>
-        <button onclick="openPdfViewAndPrint()" class="text-green-700 font-bold underline">Save as PDF</button>
-      </div>
-    </div>
-
-    <!-- Leaderboard -->
-    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-      <h3 id="leaderboardTitle" class="text-xl font-bold mb-4 text-gray-700">
-        <i class="fa-solid fa-trophy ramadan-gold"></i>
-        Global Leaderboard
-      </h3>
-
-      <input id="searchBox" class="w-full border p-3 rounded-xl mb-4 focus:outline-green-600"
-             placeholder="Search people..." />
-
-      <div id="leaderboardHiddenMsg" class="hidden text-gray-500 text-center py-8">
-        Leaderboard is hidden by admin.
-      </div>
-
-      <div class="space-y-3" id="leaderboardList">
-        <p class="text-gray-400 text-center py-4 italic">Loading rankings...</p>
-      </div>
-
-      <div id="yourRankBox" class="hidden mt-4 bg-green-50 border border-green-100 rounded-2xl p-4 text-center">
-        <p id="yourRankText" class="text-lg font-extrabold text-green-900">—</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- COUNTING PAGE -->
-  <div id="countingPage" class="hidden max-w-4xl mx-auto mt-8 px-4">
-    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-      <h3 class="text-xl font-bold mb-4 text-gray-700">
-        <i class="fa-solid fa-check ramadan-gold"></i> Counting
-      </h3>
-
-      <div id="countingGuest" class="text-center py-10">
-        <p class="text-gray-500 mb-4">Please login to use counting.</p>
-        <button onclick="openAuthModal()" class="text-green-600 font-bold underline">Login Now</button>
-      </div>
-
-      <div id="countingLocked" class="hidden text-center py-10">
-        <p class="text-gray-500 mb-4">Read-only mode is active.</p>
-        <button onclick="openPdfViewAndPrint()" class="text-green-700 font-bold underline">Save as PDF</button>
-      </div>
-
-      <div id="countingUser" class="hidden">
-        <button id="countBtn" onclick="markAsDone()"
-          class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold hover:bg-green-700 transition">
-          I Completed Today
-        </button>
-
-        <div class="bg-green-50 border border-green-100 p-4 rounded-2xl mt-4 text-center">
-          <p id="countStatus" class="text-sm text-green-700 font-semibold">—</p>
-          <p id="countOrdinal" class="text-lg font-extrabold text-green-900">—</p>
-        </div>
-
-        <!-- Qur’an preview -->
-        <div class="mt-6 border border-gray-100 rounded-3xl overflow-hidden">
-          <div class="p-4 bg-gray-50 flex items-center justify-between">
-            <div class="font-bold text-gray-700">
-              <i class="fa-solid fa-book-quran ramadan-gold"></i>
-              <span id="quranTitle">Quran Pages</span>
-            </div>
-            <div id="pageIndicator" class="text-sm text-gray-500 font-semibold">—</div>
+        <div class="grid grid-cols-4 gap-3 w-full md:w-auto">
+          <div class="bg-green-50 rounded-xl p-3 text-center">
+            <div class="text-2xl font-black text-green-900" id="d">00</div><div class="text-xs uppercase text-green-700">Days</div>
           </div>
-
-          <div id="swipeArea" class="p-4 bg-white">
-            <div id="pagesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-
-            <div class="mt-4 flex gap-3">
-              <button id="prevBtn" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-2xl font-bold transition">←</button>
-              <button id="nextBtn" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-2xl font-bold transition">→</button>
-            </div>
-
-            <p class="mt-4 text-xs text-gray-400">
-              Upload Qur’an page images in your repo. Admin can change the page range + template.
-            </p>
+          <div class="bg-green-50 rounded-xl p-3 text-center">
+            <div class="text-2xl font-black text-green-900" id="h">00</div><div class="text-xs uppercase text-green-700">Hours</div>
+          </div>
+          <div class="bg-green-50 rounded-xl p-3 text-center">
+            <div class="text-2xl font-black text-green-900" id="m">00</div><div class="text-xs uppercase text-green-700">Mins</div>
+          </div>
+          <div class="bg-green-50 rounded-xl p-3 text-center">
+            <div class="text-2xl font-black text-green-900" id="s">00</div><div class="text-xs uppercase text-green-700">Secs</div>
           </div>
         </div>
-
+      </div>
+      <div id="lockedBanner" class="hidden mt-4 bg-red-50 border border-red-200 text-red-800 rounded-2xl p-4 font-bold">
+        Read-only mode is active (event started). Login/signup/counting/admin are disabled.
       </div>
     </div>
-  </div>
 
-  <!-- ADMIN PAGE -->
-  <div id="adminPage" class="hidden max-w-4xl mx-auto mt-8 px-4">
-    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-      <h3 class="text-xl font-bold mb-2 text-gray-700">
-        <i class="fa-solid fa-lock ramadan-gold"></i> Admin Panel
-      </h3>
-      <p class="text-gray-500 mb-6">
-        Change app/event settings, Qur’an pages, show/hide leaderboard, choose Top N, manage passwords, days, and roles.
-      </p>
+    <!-- HOME -->
+    <div id="viewHome" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="card p-6">
+        <div class="text-xl font-black text-gray-900 mb-3">Today's Progress</div>
 
-      <div id="adminLockedMsg" class="hidden bg-red-50 border border-red-200 text-red-800 rounded-2xl p-4 mb-6 font-semibold">
-        Read-only mode is active. Admin editing is disabled after the event date.
-      </div>
+        <div id="homeGuest" class="text-center py-10">
+          <div class="text-gray-500 mb-3">Login to track your streak.</div>
+          <button class="btn bg-green-700 text-white w-full" onclick="openAuth()">Login / Sign Up</button>
+        </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- App / Event / Leaderboard settings -->
-        <div class="border border-gray-100 rounded-3xl p-5">
-          <h4 class="font-extrabold text-gray-800 mb-2">Top Bar + Countdown</h4>
-
-          <label class="block text-xs font-bold text-gray-500 mt-3">App name</label>
-          <input id="appNameInput" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="BaqarahStreak 🌙">
-
-          <label class="block text-xs font-bold text-gray-500 mt-3">Days till: (freeform)</label>
-          <input id="eventNameInput" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="Ramadan / Eid / Anything">
-
-          <label class="block text-xs font-bold text-gray-500 mt-3">Target date/time</label>
-          <input id="targetInput" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="YYYY-MM-DD HH:MM:SS">
-
-          <label class="block text-xs font-bold text-gray-500 mt-3">Show leaderboard to members</label>
-          <div class="mt-2 flex items-center justify-between bg-gray-50 border border-gray-100 rounded-2xl p-4">
-            <p class="text-sm text-gray-700 font-semibold">Leaderboard Visible</p>
-            <label class="inline-flex items-center cursor-pointer">
-              <input id="showLeaderboardToggle" type="checkbox" class="sr-only peer">
-              <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-green-700 relative">
-                <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-all peer-checked:translate-x-5"></div>
-              </div>
-            </label>
+        <div id="homeUser" class="hidden">
+          <div class="text-gray-600 mb-3">As-salaamu alaikum, <span class="font-black text-green-800" id="homeName">—</span></div>
+          <div class="bg-green-50 rounded-2xl p-5 text-center border border-green-100">
+            <div class="text-sm text-green-800 font-bold">Current Streak</div>
+            <div class="text-5xl font-black text-green-900" id="homeStreak">0</div>
+            <div class="text-sm text-gray-500 mt-1">Total days: <b id="homeTotal">0</b></div>
           </div>
 
-          <label class="block text-xs font-bold text-gray-500 mt-3">Top N (how many people)</label>
-          <input id="topNInput" class="w-full border p-3 rounded-xl focus:outline-green-600" inputmode="numeric" placeholder="10">
-
-          <button id="saveTopBtn" onclick="saveTopSettings()" class="mt-4 w-full bg-islamic-green text-white py-3 rounded-2xl font-bold hover:opacity-95">
-            Save
+          <button id="doneBtn" class="btn bg-green-700 text-white w-full mt-4" onclick="markDone()">
+            I Completed Today
           </button>
-        </div>
 
-        <!-- Qur’an pages settings -->
-        <div class="border border-gray-100 rounded-3xl p-5">
-          <h4 class="font-extrabold text-gray-800 mb-2">Qur’an Pages</h4>
-
-          <label class="block text-xs font-bold text-gray-500 mt-3">Preview title (changes button text too)</label>
-          <input id="qTitleInput" class="w-full border p-3 rounded-xl focus:outline-green-600" placeholder="Quran Pages">
-
-          <div class="grid grid-cols-2 gap-3 mt-3">
-            <div>
-              <label class="block text-xs font-bold text-gray-500">Start page</label>
-              <input id="startPageInput" class="w-full border p-3 rounded-xl focus:outline-green-600" inputmode="numeric" placeholder="2">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-gray-500">End page</label>
-              <input id="endPageInput" class="w-full border p-3 rounded-xl focus:outline-green-600" inputmode="numeric" placeholder="49">
-            </div>
-          </div>
-
-          <label class="block text-xs font-bold text-gray-500 mt-3">Image template</label>
-          <input id="templateInput" class="w-full border p-3 rounded-xl focus:outline-green-600"
-                 placeholder="quran-pages/page{page3}.jpg">
-          <p class="text-xs text-gray-400 mt-2">
-            Use <code>{page}</code>, <code>{page2}</code>, or <code>{page3}</code>. Example: <code>page{page3}.jpg</code> → page002.jpg.
-          </p>
-
-          <button id="saveQBtn" onclick="saveQuranSettings()" class="mt-4 w-full bg-islamic-green text-white py-3 rounded-2xl font-bold hover:opacity-95">
-            Save
-          </button>
+          <div class="text-center font-black text-green-800 mt-3" id="homeOrdinal">—</div>
         </div>
       </div>
 
+      <div class="card p-6">
+        <div class="flex items-center justify-between gap-2 mb-3">
+          <div class="text-xl font-black text-gray-900" id="lbTitle">Leaderboard</div>
+          <div class="text-xs text-gray-500 font-bold" id="lbTopNote">Top 10</div>
+        </div>
+
+        <input id="lbSearch" class="input mb-4" placeholder="Search..." />
+        <div id="lbHidden" class="hidden text-gray-500 text-center py-8">Leaderboard hidden by admin.</div>
+        <div id="lbList" class="space-y-2"></div>
+
+        <div id="yourPlaceBox" class="hidden mt-4 bg-green-50 border border-green-100 rounded-2xl p-4 text-center">
+          <div class="font-black text-green-900" id="yourPlaceText">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COUNTING -->
+    <div id="viewCounting" class="hidden card p-6">
+      <div class="text-xl font-black text-gray-900 mb-2">Counting</div>
+
+      <div id="countGuest" class="text-center py-10">
+        <div class="text-gray-500 mb-3">Login to use counting.</div>
+        <button class="btn bg-green-700 text-white w-full" onclick="openAuth()">Login / Sign Up</button>
+      </div>
+
+      <div id="countUser" class="hidden">
+        <button class="btn bg-green-700 text-white w-full" onclick="markDone()">I Completed Today</button>
+        <div class="mt-4 bg-green-50 border border-green-100 rounded-2xl p-4 text-center">
+          <div class="text-sm text-green-800 font-bold" id="countStatus">—</div>
+          <div class="text-lg font-black text-green-900" id="countOrdinal">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN -->
+    <div id="viewAdmin" class="hidden card p-6">
+      <div class="text-xl font-black text-gray-900 mb-1">Admin Panel</div>
+      <div class="text-gray-500 small mb-5">
+        Admin can create accounts, rename usernames, toggle leaderboard visibility per user, change role, reset password, and change days.
+      </div>
+
+      <!-- Settings -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="border border-gray-100 rounded-2xl p-4">
+          <div class="font-black text-gray-900 mb-3">App / Countdown</div>
+          <label class="text-xs font-black text-gray-500">App name</label>
+          <input id="setAppName" class="input mb-3" placeholder="BaqarahStreak 🌙" />
+          <label class="text-xs font-black text-gray-500">Event title</label>
+          <input id="setEventName" class="input mb-3" placeholder="Ramadan 2026" />
+          <label class="text-xs font-black text-gray-500">Target datetime (YYYY-MM-DD HH:MM:SS)</label>
+          <input id="setTarget" class="input mb-3" placeholder="2026-02-18 00:00:00" />
+          <div class="flex items-center justify-between bg-gray-50 border border-gray-100 rounded-2xl p-4 mb-3">
+            <div class="font-black text-gray-700">Leaderboard visible</div>
+            <input id="setShowLB" type="checkbox" class="scale-125" />
+          </div>
+          <label class="text-xs font-black text-gray-500">Top N</label>
+          <input id="setTopN" class="input mb-3" inputmode="numeric" placeholder="10" />
+
+          <button class="btn bg-green-800 text-white w-full" onclick="adminSaveSettings()">Save Settings</button>
+        </div>
+
+        <!-- Create user -->
+        <div class="border border-gray-100 rounded-2xl p-4">
+          <div class="font-black text-gray-900 mb-3">Create New Account</div>
+
+          <input id="newUser" class="input mb-3" placeholder="Username" />
+          <input id="newName" class="input mb-3" placeholder="Display Name" />
+          <input id="newPass" class="input mb-3" placeholder="Password" type="password" />
+
+          <div class="flex items-center justify-between bg-gray-50 border border-gray-100 rounded-2xl p-4 mb-3">
+            <div class="font-black text-gray-700">Role</div>
+            <select id="newRole" class="input" style="padding:.55rem 1rem;width:auto">
+              <option value="Member" selected>Member</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+
+          <div class="flex items-center justify-between bg-gray-50 border border-gray-100 rounded-2xl p-4 mb-3">
+            <div class="font-black text-gray-700">Show on leaderboard</div>
+            <input id="newShowLB" type="checkbox" class="scale-125" checked />
+          </div>
+
+          <button class="btn bg-green-800 text-white w-full" onclick="adminCreateUser()">Create Account</button>
+          <div class="text-xs text-gray-400 mt-3">
+            Note: this app stores data in each device browser (localStorage). GitHub Pages has no shared database.
+          </div>
+        </div>
+      </div>
+
+      <!-- User management -->
       <div class="mt-8">
-        <h4 class="font-extrabold text-gray-800 mb-3">Manage Users</h4>
-        <div id="adminUsers" class="space-y-4"></div>
+        <div class="font-black text-gray-900 mb-3">Manage Users</div>
+        <div id="adminUsers" class="space-y-3"></div>
 
-        <div class="mt-6 flex flex-col sm:flex-row gap-3">
-          <button onclick="exportData()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-2xl font-bold transition">
-            Export Data (Copy JSON)
-          </button>
-          <button onclick="wipeAll()" class="w-full bg-red-50 hover:bg-red-100 text-red-700 py-3 rounded-2xl font-bold transition border border-red-200">
-            Wipe ALL Data
-          </button>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
+          <button class="btn bg-gray-100 text-gray-800 w-full" onclick="exportJSON()">Export JSON (Copy)</button>
+          <button class="btn bg-red-50 text-red-700 border border-red-200 w-full" onclick="wipeAll()">Wipe ALL Data</button>
         </div>
       </div>
     </div>
+
   </div>
 
-  <!-- AUTH MODAL -->
-  <div id="authModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-    <div class="bg-white p-8 rounded-3xl max-w-lg w-full shadow-2xl">
+  <!-- Auth Modal -->
+  <div id="authModal" class="hidden fixed inset-0 bg-black/50 z-40 flex items-center justify-center p-4">
+    <div class="card w-full max-w-xl p-6">
       <div class="flex items-center justify-between mb-3">
-        <h2 class="text-2xl font-bold">Login / Sign Up</h2>
-        <button onclick="closeAuthModal()" class="text-gray-400 hover:text-gray-600">
-          <i class="fa-solid fa-xmark text-xl"></i>
-        </button>
+        <div class="text-xl font-black">Login / Sign Up</div>
+        <button class="btn bg-gray-100 text-gray-800" onclick="closeAuth()">✕</button>
       </div>
 
-      <!-- Mobile: Login then Sign Up under -->
-      <div class="block md:hidden">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="border border-gray-100 rounded-2xl p-4">
-          <h3 class="font-extrabold text-gray-800 mb-2">Login</h3>
-          <input id="loginUser_m" placeholder="Username" class="w-full border p-3 rounded-xl mb-3 focus:outline-green-600">
-          <input id="loginPass_m" type="password" placeholder="Password" class="w-full border p-3 rounded-xl mb-3 focus:outline-green-600">
-          <button onclick="loginMobile()" class="w-full bg-islamic-green text-white py-3 rounded-xl font-bold">Login</button>
-        </div>
-
-        <div class="mt-4 border border-gray-100 rounded-2xl p-4">
-          <h3 class="font-extrabold text-gray-800 mb-2">Sign Up</h3>
-          <input id="suUser_m" placeholder="Username" class="w-full border p-3 rounded-xl mb-3 focus:outline-green-600">
-          <input id="suName_m" placeholder="Display Name" class="w-full border p-3 rounded-xl mb-3 focus:outline-green-600">
-          <input id="suPass_m" type="password" placeholder="Password" class="w-full border p-3 rounded-xl mb-3 focus:outline-green-600">
-          <button onclick="signupMobile()" class="w-full bg-gray-100 text-gray-800 py-3 rounded-xl font-bold">Sign Up</button>
-        </div>
-      </div>
-
-      <!-- Desktop: two columns -->
-      <div class="hidden md:grid grid-cols-2 gap-4 mt-2">
-        <div class="border border-gray-100 rounded-2xl p-4">
-          <h3 class="font-extrabold text-gray-800 mb-2">Login</h3>
-          <input id="loginUser" placeholder="Username" class="w-full border p-3 rounded-xl mb-3 focus:outline-green-600">
-          <input id="loginPass" type="password" placeholder="Password" class="w-full border p-3 rounded-xl mb-3 focus:outline-green-600">
-          <button onclick="loginDesktop()" class="w-full bg-islamic-green text-white py-3 rounded-xl font-bold">Login</button>
+          <div class="font-black text-gray-900 mb-2">Login</div>
+          <input id="liUser" class="input mb-3" placeholder="Username" />
+          <input id="liPass" class="input mb-3" placeholder="Password" type="password" />
+          <button class="btn bg-green-800 text-white w-full" onclick="login()">Login</button>
         </div>
 
         <div class="border border-gray-100 rounded-2xl p-4">
-          <h3 class="font-extrabold text-gray-800 mb-2">Sign Up</h3>
-          <input id="suUser" placeholder="Username" class="w-full border p-3 rounded-xl mb-3 focus:outline-green-600">
-          <input id="suName" placeholder="Display Name" class="w-full border p-3 rounded-xl mb-3 focus:outline-green-600">
-          <input id="suPass" type="password" placeholder="Password" class="w-full border p-3 rounded-xl mb-3 focus:outline-green-600">
-          <button onclick="signupDesktop()" class="w-full bg-gray-100 text-gray-800 py-3 rounded-xl font-bold">Sign Up</button>
+          <div class="font-black text-gray-900 mb-2">Sign Up</div>
+          <input id="suUser" class="input mb-3" placeholder="Username" />
+          <input id="suName" class="input mb-3" placeholder="Display Name" />
+          <input id="suPass" class="input mb-3" placeholder="Password" type="password" />
+          <button class="btn bg-gray-100 text-gray-800 w-full" onclick="signup()">Create account</button>
         </div>
       </div>
 
-      <button onclick="closeAuthModal()" class="w-full mt-4 text-gray-400 text-sm">Cancel</button>
-    </div>
-  </div>
-
-  <!-- PDF PAGE (hidden normally; visible on print) -->
-  <div id="pdfPage" class="hidden max-w-3xl mx-auto mt-10 px-6">
-    <div class="print-card bg-white rounded-3xl shadow-sm p-8">
-      <h1 class="text-2xl font-extrabold text-gray-900 mb-2" id="pdfGreeting">As-salaamu alaikum, Guest</h1>
-      <p class="text-gray-600 mb-6" id="pdfEventLine">—</p>
-
-      <div id="pdfLeaderboardBlock" class="mt-6">
-        <h2 class="text-lg font-extrabold text-gray-900 mb-3">Leaderboard</h2>
-        <div id="pdfLeaderboard" class="space-y-2"></div>
-      </div>
-
-      <div id="pdfYourRankBlock" class="mt-6 bg-green-50 border border-green-100 rounded-2xl p-4">
-        <p class="text-sm text-green-700 font-semibold">Your place</p>
-        <p id="pdfYourRank" class="text-lg font-extrabold text-green-900">—</p>
-      </div>
-
-      <p class="mt-8 text-xs text-gray-400">Generated by BaqarahStreak (Print / Save as PDF)</p>
+      <div class="text-center text-gray-400 small mt-3">Tip: username has no spaces.</div>
     </div>
   </div>
 
   <!-- Toast -->
-  <div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 bg-white text-gray-800 px-4 py-3 rounded-2xl shadow-xl border border-gray-100 z-[60]">
-    <span id="toastMsg" class="font-semibold"></span>
+  <div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 card px-4 py-3 z-50">
+    <div class="font-black text-gray-900" id="toastMsg">—</div>
   </div>
 
 <script>
-/* ======================
-   Admin Credentials
-====================== */
+/* =========================
+   CONFIG
+========================= */
 const ADMIN_USERNAME = "Admin00";
 const ADMIN_PASSWORD = "Admin0000";
 
-/* ======================
-   Storage Keys
-====================== */
-const KEY_USERS = "bstreak_users_v3";
-const KEY_SESSION = "bstreak_session_v3";
-const KEY_SETTINGS = "bstreak_settings_v3";
+const KEY_USERS    = "streak_users_v1";
+const KEY_SESSION  = "streak_session_v1";
+const KEY_SETTINGS = "streak_settings_v1";
 
-/* ======================
-   Default Settings
-   - You can change any of these in Admin panel
-====================== */
-const defaultSettings = {
+const DEFAULT_SETTINGS = {
   appName: "BaqarahStreak 🌙",
   eventName: "Ramadan 2026",
   targetDateTime: "2026-02-18 00:00:00",
-
   showLeaderboard: true,
-  topN: 10,
-
-  quranPreviewTitle: "Surah Al-Baqarah Pages",
-  startPage: 2,
-  endPage: 49,
-  pageTemplate: "quran-pages/page{page3}.jpg"
+  topN: 10
 };
 
-/* ======================
-   Helpers
-====================== */
-function loadJSON(key, fallback){
-  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
-  catch { return fallback; }
+/* =========================
+   UTIL
+========================= */
+const $ = (id)=>document.getElementById(id);
+
+function toast(msg){
+  $("toastMsg").textContent = msg;
+  $("toast").classList.remove("hidden");
+  setTimeout(()=> $("toast").classList.add("hidden"), 2200);
 }
-function saveJSON(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+
+function loadJSON(key, fallback){
+  try{
+    const v = localStorage.getItem(key);
+    return v ? JSON.parse(v) : fallback;
+  }catch{
+    return fallback;
+  }
+}
+function saveJSON(key, value){
+  localStorage.setItem(key, JSON.stringify(value));
+}
 
 function loadUsers(){ return loadJSON(KEY_USERS, {}); }
 function saveUsers(u){ saveJSON(KEY_USERS, u); }
@@ -473,45 +292,38 @@ function saveSession(s){ saveJSON(KEY_SESSION, s); }
 
 function loadSettings(){
   const s = loadJSON(KEY_SETTINGS, null);
-  return s ? ({...defaultSettings, ...s}) : ({...defaultSettings});
+  return s ? ({...DEFAULT_SETTINGS, ...s}) : ({...DEFAULT_SETTINGS});
 }
 function saveSettings(s){ saveJSON(KEY_SETTINGS, s); }
 
-function toast(msg){
-  document.getElementById("toastMsg").textContent = msg;
-  const t = document.getElementById("toast");
-  t.classList.remove("hidden");
-  setTimeout(()=>t.classList.add("hidden"), 2200);
+function normalizeUsername(u){
+  return (u||"").trim().replace(/\s+/g,"");
 }
 
-function escapeHTML(str){
-  return String(str).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+function todayISO(){
+  return new Date().toISOString().slice(0,10);
 }
-
-async function sha256(text){
-  const enc = new TextEncoder().encode(text);
-  const buf = await crypto.subtle.digest("SHA-256", enc);
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
-}
-
-function todayISO(){ return new Date().toISOString().split("T")[0]; }
 function yesterdayISO(){
   const d = new Date(); d.setDate(d.getDate()-1);
-  return d.toISOString().split("T")[0];
+  return d.toISOString().slice(0,10);
 }
-
 function ordinal(n){
   const s=["th","st","nd","rd"], v=n%100;
   return n + (s[(v-20)%10] || s[v] || s[0]);
 }
 
+async function sha256(text){
+  const enc = new TextEncoder().encode(text);
+  const buf = await crypto.subtle.digest("SHA-256", enc);
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+
 function parseTargetDateTime(str){
   const s = (str||"").trim();
-  // "YYYY-MM-DD HH:MM:SS"
   const m = s.match(/^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})(?::(\d{2}))?$/);
   if(m){
     const [_,Y,Mo,D,H,Mi,S] = m;
-    return new Date(Number(Y), Number(Mo)-1, Number(D), Number(H), Number(Mi), Number(S||"0")).getTime();
+    return new Date(+Y, +Mo-1, +D, +H, +Mi, +(S||"0")).getTime();
   }
   const d = new Date(s);
   if(!isNaN(d.getTime())) return d.getTime();
@@ -520,26 +332,50 @@ function parseTargetDateTime(str){
 
 function isLocked(){
   const settings = loadSettings();
-  const target = parseTargetDateTime(settings.targetDateTime);
-  return Date.now() >= target;
+  return Date.now() >= parseTargetDateTime(settings.targetDateTime);
 }
 
-function getCurrentUser(){
+function currentUser(){
   const sess = loadSession();
   if(!sess.username) return null;
-  const u = loadUsers()[sess.username];
-  return u || null;
+  return loadUsers()[sess.username] || null;
 }
 
-function getRecitationLabel(){
-  // Whatever admin sets as Preview title
-  const s = loadSettings();
-  return (s.quranPreviewTitle || "Quran Pages").trim();
+/* =========================
+   MENU + VIEWS
+========================= */
+function toggleMenu(){ $("menu").classList.toggle("hidden"); }
+document.addEventListener("click",(e)=>{
+  const menu = $("menu");
+  const isBtn = e.target.closest("button") && e.target.closest("button").getAttribute("aria-label")==="Menu";
+  if(!menu.classList.contains("hidden")){
+    if(!menu.contains(e.target) && !isBtn) menu.classList.add("hidden");
+  }
+});
+
+function showView(name){
+  $("menu").classList.add("hidden");
+  $("viewHome").classList.toggle("hidden", name!=="home");
+  $("viewCounting").classList.toggle("hidden", name!=="counting");
+  $("viewAdmin").classList.toggle("hidden", name!=="admin");
+  if(name==="admin") renderAdmin();
+  if(name==="leaderboard"){
+    window.scrollTo({top: $("lbTitle").offsetTop - 80, behavior:"smooth"});
+  } else {
+    window.scrollTo({top: 0, behavior:"smooth"});
+  }
 }
 
-/* ======================
-   Ensure Admin User Exists
-====================== */
+/* =========================
+   AUTH MODAL
+========================= */
+function openAuth(){
+  if(isLocked()) return toast("Read-only mode.");
+  $("authModal").classList.remove("hidden");
+}
+function closeAuth(){ $("authModal").classList.add("hidden"); }
+window.addEventListener("keydown",(e)=>{ if(e.key==="Escape") closeAuth(); });
+
 async function ensureAdmin(){
   const users = loadUsers();
   if(!users[ADMIN_USERNAME]){
@@ -547,85 +383,27 @@ async function ensureAdmin(){
       username: ADMIN_USERNAME,
       displayName: "Admin",
       passHash: await sha256(ADMIN_PASSWORD),
+      role: "Admin",
+      showOnLeaderboard: true,
       totalDays: 0,
       streak: 0,
       lastDone: null,
-      role: "Admin",
       createdAt: Date.now()
     };
     saveUsers(users);
   } else {
     users[ADMIN_USERNAME].role = "Admin";
+    if(users[ADMIN_USERNAME].showOnLeaderboard === undefined) users[ADMIN_USERNAME].showOnLeaderboard = true;
     saveUsers(users);
   }
 }
 
-/* ======================
-   Menu open/close
-====================== */
-const menu = document.getElementById("menu");
-document.getElementById("menuBtn").addEventListener("click", ()=> menu.classList.toggle("hidden"));
-document.addEventListener("click", (e)=>{
-  const btn = document.getElementById("menuBtn");
-  if(!menu.classList.contains("hidden")){
-    if(!menu.contains(e.target) && !btn.contains(e.target)) menu.classList.add("hidden");
-  }
-});
-
-/* ======================
-   Sections
-====================== */
-function showSection(which){
-  menu.classList.add("hidden");
-
-  const homeGrid = document.getElementById("homeGrid");
-  const countingPage = document.getElementById("countingPage");
-  const adminPage = document.getElementById("adminPage");
-
-  homeGrid.classList.remove("hidden");
-  countingPage.classList.add("hidden");
-  adminPage.classList.add("hidden");
-
-  if(which === "counting"){
-    homeGrid.classList.add("hidden");
-    countingPage.classList.remove("hidden");
-    renderQuran(false);
-    window.scrollTo({top: countingPage.offsetTop - 80, behavior:"smooth"});
-  } else if(which === "admin"){
-    const u = getCurrentUser();
-    if(isLocked()) { toast("Read-only mode. Admin disabled."); return; }
-    if(!u || u.role !== "Admin"){ toast("Admins only."); return; }
-    homeGrid.classList.add("hidden");
-    adminPage.classList.remove("hidden");
-    fillAdminInputs();
-    renderAdminUsers();
-    window.scrollTo({top: adminPage.offsetTop - 80, behavior:"smooth"});
-  } else if(which === "leaderboard"){
-    const el = document.getElementById("leaderboardTitle");
-    window.scrollTo({top: el.offsetTop - 120, behavior:"smooth"});
-  } else {
-    window.scrollTo({top: 0, behavior:"smooth"});
-  }
-}
-
-/* ======================
-   Auth Modal
-====================== */
-function openAuthModal(){
-  if(isLocked()) { toast("Read-only mode."); return; }
-  document.getElementById("authModal").classList.remove("hidden");
-}
-function closeAuthModal(){ document.getElementById("authModal").classList.add("hidden"); }
-window.addEventListener("keydown",(e)=>{ if(e.key==="Escape") closeAuthModal(); });
-
-/* ======================
-   Signup / Login / Logout
-====================== */
-async function signup(username, displayName, password){
+async function signup(){
   if(isLocked()) return toast("Read-only mode.");
-  username = (username||"").trim();
-  displayName = (displayName||"").trim();
-  password = (password||"").trim();
+  const username = normalizeUsername($("suUser").value);
+  const displayName = ($("suName").value||"").trim();
+  const password = ($("suPass").value||"").trim();
+
   if(!username || !displayName || !password) return toast("Fill all fields.");
   if(username.length < 3) return toast("Username too short.");
 
@@ -633,25 +411,26 @@ async function signup(username, displayName, password){
   if(users[username]) return toast("Username already exists.");
 
   users[username] = {
-    username,
-    displayName,
+    username, displayName,
     passHash: await sha256(password),
+    role: "Member",
+    showOnLeaderboard: true,
     totalDays: 0,
     streak: 0,
     lastDone: null,
-    role: "Member",
     createdAt: Date.now()
   };
   saveUsers(users);
   toast("Account created!");
+  $("suUser").value=""; $("suName").value=""; $("suPass").value="";
   renderAll();
 }
 
-async function login(username, password){
+async function login(){
   if(isLocked()) return toast("Read-only mode.");
-  username = (username||"").trim();
-  password = (password||"").trim();
-  if(!username || !password) return toast("Enter username & password.");
+  const username = normalizeUsername($("liUser").value);
+  const password = ($("liPass").value||"").trim();
+  if(!username || !password) return toast("Enter username + password.");
 
   const users = loadUsers();
   const u = users[username];
@@ -661,8 +440,8 @@ async function login(username, password){
   if(h !== u.passHash) return toast("Wrong password.");
 
   saveSession({username});
-  closeAuthModal();
-  toast("Logged in!");
+  closeAuth();
+  toast("Logged in.");
   renderAll();
 }
 
@@ -672,331 +451,207 @@ function logout(){
   renderAll();
 }
 
-/* Modal wiring */
-function signupDesktop(){ signup(suUser.value, suName.value, suPass.value); }
-function loginDesktop(){ login(loginUser.value, loginPass.value); }
-function signupMobile(){ signup(suUser_m.value, suName_m.value, suPass_m.value); }
-function loginMobile(){ login(loginUser_m.value, loginPass_m.value); }
-
-/* ======================
-   Countdown
-====================== */
-function updateCountdown(){
-  const settings = loadSettings();
-  const target = parseTargetDateTime(settings.targetDateTime);
-  const now = Date.now();
-  const distance = target - now;
-
-  document.getElementById("countdownTitle").textContent = `Days till: ${settings.eventName}`;
-  document.getElementById("targetLabel").textContent = `Target: ${settings.targetDateTime}`;
-
-  if(distance <= 0){
-    ["days","hours","minutes","seconds"].forEach(id => document.getElementById(id).innerText="00");
-    return;
-  }
-
-  const dd = Math.floor(distance / (1000*60*60*24));
-  const hh = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
-  const mm = Math.floor((distance % (1000*60*60)) / (1000*60));
-  const ss = Math.floor((distance % (1000*60)) / 1000);
-
-  document.getElementById("days").innerText = String(dd).padStart(2,"0");
-  document.getElementById("hours").innerText = String(hh).padStart(2,"0");
-  document.getElementById("minutes").innerText = String(mm).padStart(2,"0");
-  document.getElementById("seconds").innerText = String(ss).padStart(2,"0");
-}
-
-/* ======================
-   Counting logic
-====================== */
+/* =========================
+   COUNTING
+========================= */
 function alreadyDoneToday(u){ return u.lastDone === todayISO(); }
 
-function markAsDone(){
+function markDone(){
   if(isLocked()) return toast("Read-only mode.");
-  const sess = loadSession();
-  if(!sess.username) return toast("Login first.");
+  const u = currentUser();
+  if(!u) return toast("Login first.");
+
+  if(alreadyDoneToday(u)) return toast("Already done today.");
 
   const users = loadUsers();
-  const u = users[sess.username];
-  if(!u) return toast("User missing.");
+  const me = users[u.username];
 
-  if(alreadyDoneToday(u)) return toast("Already completed today.");
+  // streak logic
+  if(me.lastDone === yesterdayISO()) me.streak = (me.streak||0) + 1;
+  else me.streak = 1;
 
-  // Streak
-  if(u.lastDone === yesterdayISO()) u.streak = (u.streak||0) + 1;
-  else u.streak = 1;
+  me.totalDays = (me.totalDays||0) + 1;
+  me.lastDone = todayISO();
 
-  u.totalDays = (u.totalDays||0) + 1;
-  u.lastDone = todayISO();
-
-  users[sess.username] = u;
+  users[me.username] = me;
   saveUsers(users);
 
   toast("Saved ✅");
   renderAll();
 }
 
-/* ======================
-   Leaderboard + rank
-   - Top N configurable
-   - show/hide configurable
-====================== */
-function getSortedUsers(){
-  const users = Object.values(loadUsers()).filter(u=>u && u.username);
-  // sort by totalDays desc, then streak desc, then username asc
-  users.sort((a,b)=>
+/* =========================
+   LEADERBOARD
+   - filters: showOnLeaderboard !== false
+========================= */
+function getSortedLeaderboardUsers(){
+  const all = Object.values(loadUsers()).filter(x=>x && x.username);
+  const visible = all.filter(x => x.showOnLeaderboard !== false);
+
+  visible.sort((a,b)=>
     (b.totalDays||0) - (a.totalDays||0) ||
     (b.streak||0) - (a.streak||0) ||
     (a.username||"").localeCompare(b.username||"")
   );
-  return users;
+  return visible;
 }
 
 function computeRank(username){
-  const users = getSortedUsers();
-  const idx = users.findIndex(u => u.username === username);
-  return idx === -1 ? null : (idx + 1);
+  const list = getSortedLeaderboardUsers();
+  const idx = list.findIndex(x=>x.username===username);
+  return idx === -1 ? null : (idx+1);
 }
 
 function renderLeaderboard(){
   const settings = loadSettings();
+  const topN = Math.max(1, Number(settings.topN)||10);
+  $("lbTopNote").textContent = `Top ${topN}`;
+  $("lbTitle").textContent = `Leaderboard`;
+
   const show = !!settings.showLeaderboard;
+  $("lbHidden").classList.toggle("hidden", show);
+  $("lbSearch").classList.toggle("hidden", !show);
+  $("lbList").innerHTML = "";
 
-  const q = (document.getElementById("searchBox").value || "").trim().toLowerCase();
-  const all = getSortedUsers();
+  if(!show){
+    $("yourPlaceBox").classList.add("hidden");
+    return;
+  }
 
-  // Top N visible list (still searchable inside top list)
-  const topN = Math.max(1, Number(settings.topN) || 10);
-  let top = all.slice(0, topN);
+  const q = ($("lbSearch").value||"").trim().toLowerCase();
+  let list = getSortedLeaderboardUsers().slice(0, topN);
 
   if(q){
-    top = top.filter(u =>
+    list = list.filter(u =>
       (u.username||"").toLowerCase().includes(q) ||
       (u.displayName||"").toLowerCase().includes(q)
     );
   }
 
-  // Hide list if admin disabled
-  document.getElementById("leaderboardHiddenMsg").classList.toggle("hidden", show);
-  document.getElementById("leaderboardList").classList.toggle("hidden", !show);
-  document.getElementById("searchBox").classList.toggle("hidden", !show);
-
-  // Title
-  document.getElementById("leaderboardTitle").innerHTML =
-    `<i class="fa-solid fa-trophy ramadan-gold"></i> Global Leaderboard (Top ${topN})`;
-
-  if(!show){
-    document.getElementById("leaderboardList").innerHTML = "";
+  if(list.length === 0){
+    $("lbList").innerHTML = `<div class="text-center text-gray-400 italic py-6">No results.</div>`;
   } else {
-    const html = top.map((u,i)=>{
-      const hasStreak = (u.streak||0) >= 2;
-      const rankStyle = (i === 0) ? "bg-yellow-50 border border-yellow-200" : "bg-gray-50 border border-transparent";
-      const nameHtml = hasStreak
-        ? `<span class="font-extrabold text-red-600 flex items-center gap-2">${escapeHTML(u.displayName)} <span>🔥</span></span>`
-        : `<span class="font-semibold text-gray-800">${escapeHTML(u.displayName)}</span>`;
-
+    $("lbList").innerHTML = list.map((u,i)=>{
+      const flame = (u.streak||0) >= 2 ? " 🔥" : "";
+      const nameClass = (u.streak||0) >= 2 ? "text-red-600 font-black" : "text-gray-900 font-extrabold";
       return `
-        <div class="flex justify-between items-center p-3 ${rankStyle} rounded-xl">
+        <div class="flex items-center justify-between bg-gray-50 border border-gray-100 rounded-2xl p-3">
           <div class="flex items-center gap-3">
-            <span class="text-gray-500 font-bold w-7">${i+1}.</span>
+            <div class="font-black text-gray-500 w-8">${i+1}.</div>
             <div>
-              ${nameHtml}
-              <div class="text-xs text-gray-500">@${escapeHTML(u.username)}</div>
+              <div class="${nameClass}">${escapeHtml(u.displayName)}${flame}</div>
+              <div class="text-xs text-gray-500">@${escapeHtml(u.username)}</div>
             </div>
           </div>
           <div class="text-right">
-            <div class="font-bold text-green-700">${u.totalDays||0} Days</div>
-            <div class="text-xs text-gray-500">Streak: ${u.streak||0}</div>
+            <div class="font-black text-green-800">${u.totalDays||0} Days</div>
+            <div class="text-xs text-gray-500">Streak ${u.streak||0}</div>
           </div>
         </div>
       `;
     }).join("");
-
-    document.getElementById("leaderboardList").innerHTML =
-      html || `<p class="text-gray-400 text-center py-4 italic">No matches.</p>`;
   }
 
-  // Your rank box
-  const me = getCurrentUser();
-  const box = document.getElementById("yourRankBox");
-  const text = document.getElementById("yourRankText");
+  const me = currentUser();
+  if(!me){
+    $("yourPlaceBox").classList.add("hidden");
+    return;
+  }
 
-  if(me){
-    const rank = computeRank(me.username);
-    if(rank !== null){
-      if(rank <= topN){
-        box.classList.add("hidden");
-      } else {
-        box.classList.remove("hidden");
-        text.textContent = `As-salaamu alaikum ${me.displayName}, your place is #${rank}`;
-      }
-    } else {
-      box.classList.add("hidden");
-    }
+  const r = computeRank(me.username);
+  $("yourPlaceBox").classList.remove("hidden");
+  if(r === null){
+    $("yourPlaceText").textContent = "You are hidden from leaderboard (admin setting).";
+  } else if(r <= topN){
+    $("yourPlaceBox").classList.add("hidden");
   } else {
-    box.classList.add("hidden");
+    $("yourPlaceText").textContent = `Your place: #${r}`;
   }
 }
 
-/* ======================
-   Qur’an Preview (images)
-====================== */
-let currentPage = null;
-
-function pad(n, digits){ return String(n).padStart(digits,"0"); }
-function pagesPerView(){ return window.matchMedia("(min-width: 768px)").matches ? 2 : 1; }
-
-function buildPageSrc(template, pageNum){
-  return template
-    .replaceAll("{page3}", pad(pageNum,3))
-    .replaceAll("{page2}", pad(pageNum,2))
-    .replaceAll("{page}", String(pageNum));
+function escapeHtml(str){
+  return String(str||"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
-function clampPage(p, s){
-  const ppv = pagesPerView();
-  if(ppv === 2){
-    const maxStart = Math.max(s.startPage, s.endPage - 1);
-    if(p < s.startPage) p = s.startPage;
-    if(p > maxStart) p = maxStart;
-  } else {
-    if(p < s.startPage) p = s.startPage;
-    if(p > s.endPage) p = s.endPage;
-  }
-  return p;
-}
-
-function renderQuran(reset=false){
-  const s = loadSettings();
-  document.getElementById("quranTitle").textContent = s.quranPreviewTitle;
-
-  const ppv = pagesPerView();
-  if(reset || currentPage === null) currentPage = s.startPage;
-  currentPage = clampPage(currentPage, s);
-
-  const wanted = (ppv === 2) ? [currentPage, currentPage+1] : [currentPage];
-  const pages = wanted.filter(p => p >= s.startPage && p <= s.endPage);
-
-  document.getElementById("pageIndicator").textContent =
-    (ppv===2 && pages.length===2) ? `Pages ${pages[0]}–${pages[1]}` : `Page ${pages[0]}`;
-
-  const grid = document.getElementById("pagesGrid");
-  grid.innerHTML = pages.map(p=>{
-    const src = buildPageSrc(s.pageTemplate, p);
-    return `
-      <div class="border border-gray-100 rounded-2xl overflow-hidden bg-gray-50">
-        <div class="px-3 py-2 text-xs font-bold text-gray-600 flex justify-between items-center">
-          <span>Page ${p}</span>
-        </div>
-        <div class="bg-white">
-          <img src="${src}" alt="Page ${p}"
-               class="w-full h-[420px] object-contain bg-white"
-               onerror="this.onerror=null; this.style.display='none'; this.parentElement.insertAdjacentHTML('beforeend','<div class=&quot;text-center text-gray-400 p-10&quot;>Missing image<br><span class=&quot;text-xs&quot;>${escapeHTML(src)}</span></div>');" />
-        </div>
-      </div>
-    `;
-  }).join("");
-
-  const step = ppv;
-  const maxStart = (ppv===2) ? Math.max(s.startPage, s.endPage - 1) : s.endPage;
-
-  const prev = document.getElementById("prevBtn");
-  const next = document.getElementById("nextBtn");
-
-  prev.disabled = (currentPage - step) < s.startPage;
-  next.disabled = (currentPage + step) > maxStart;
-
-  prev.onclick = ()=>{ if(!prev.disabled){ currentPage = clampPage(currentPage-step, s); renderQuran(false);} };
-  next.onclick = ()=>{ if(!next.disabled){ currentPage = clampPage(currentPage+step, s); renderQuran(false);} };
-}
-
-function wireSwipe(){
-  const area = document.getElementById("swipeArea");
-  let x0 = null;
-
-  area.addEventListener("touchstart",(e)=>{
-    if(!e.touches || e.touches.length !== 1) return;
-    x0 = e.touches[0].clientX;
-  }, {passive:true});
-
-  area.addEventListener("touchend",(e)=>{
-    if(x0 === null) return;
-    const x1 = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientX : null;
-    if(x1 === null){ x0=null; return; }
-    const dx = x1 - x0;
-    x0 = null;
-    if(Math.abs(dx) < 40) return;
-    if(dx < 0) document.getElementById("nextBtn").click();
-    else document.getElementById("prevBtn").click();
-  }, {passive:true});
-}
-
-/* ======================
-   Admin: settings + users + roles
-====================== */
-function fillAdminInputs(){
-  const s = loadSettings();
-  appNameInput.value = s.appName;
-  eventNameInput.value = s.eventName;
-  targetInput.value = s.targetDateTime;
-  showLeaderboardToggle.checked = !!s.showLeaderboard;
-  topNInput.value = s.topN;
-
-  qTitleInput.value = s.quranPreviewTitle;
-  startPageInput.value = s.startPage;
-  endPageInput.value = s.endPage;
-  templateInput.value = s.pageTemplate;
-}
-
+/* =========================
+   ADMIN
+========================= */
 function adminGuard(){
-  const u = getCurrentUser();
   if(isLocked()) return {ok:false, msg:"Read-only mode."};
-  if(!u || u.role !== "Admin") return {ok:false, msg:"Admins only."};
+  const me = currentUser();
+  if(!me || me.role !== "Admin") return {ok:false, msg:"Admins only."};
   return {ok:true, msg:"ok"};
 }
 
-function saveTopSettings(){
+function fillAdminSettings(){
+  const s = loadSettings();
+  $("setAppName").value = s.appName;
+  $("setEventName").value = s.eventName;
+  $("setTarget").value = s.targetDateTime;
+  $("setShowLB").checked = !!s.showLeaderboard;
+  $("setTopN").value = s.topN;
+}
+
+function adminSaveSettings(){
   const g = adminGuard();
   if(!g.ok) return toast(g.msg);
 
   const s = loadSettings();
-  s.appName = (appNameInput.value || "").trim() || defaultSettings.appName;
-  s.eventName = (eventNameInput.value || "").trim() || defaultSettings.eventName;
-  s.targetDateTime = (targetInput.value || "").trim() || defaultSettings.targetDateTime;
-  s.showLeaderboard = !!showLeaderboardToggle.checked;
+  s.appName = ($("setAppName").value||"").trim() || DEFAULT_SETTINGS.appName;
+  s.eventName = ($("setEventName").value||"").trim() || DEFAULT_SETTINGS.eventName;
+  s.targetDateTime = ($("setTarget").value||"").trim() || DEFAULT_SETTINGS.targetDateTime;
+  s.showLeaderboard = !!$("setShowLB").checked;
 
-  const n = Number(topNInput.value);
-  s.topN = (Number.isFinite(n) && n >= 1 && n <= 200) ? Math.floor(n) : 10;
+  const n = Number($("setTopN").value);
+  s.topN = (Number.isFinite(n) && n>=1 && n<=200) ? Math.floor(n) : 10;
 
   saveSettings(s);
-  toast("Saved.");
+  toast("Settings saved.");
   renderAll();
 }
 
-function saveQuranSettings(){
+async function adminCreateUser(){
   const g = adminGuard();
   if(!g.ok) return toast(g.msg);
 
-  const s = loadSettings();
-  s.quranPreviewTitle = (qTitleInput.value || "").trim() || defaultSettings.quranPreviewTitle;
+  const username = normalizeUsername($("newUser").value);
+  const displayName = ($("newName").value||"").trim();
+  const password = ($("newPass").value||"").trim();
+  const role = ($("newRole").value === "Admin") ? "Admin" : "Member";
+  const showOnLeaderboard = !!$("newShowLB").checked;
 
-  const start = Number(startPageInput.value);
-  const end = Number(endPageInput.value);
-  if(!Number.isFinite(start) || !Number.isFinite(end) || start < 1 || end < start){
-    return toast("Fix start/end pages.");
-  }
-  s.startPage = Math.floor(start);
-  s.endPage = Math.floor(end);
+  if(!username || !displayName || !password) return toast("Fill all fields.");
+  if(username.length < 3) return toast("Username too short.");
+  if(password.length < 4) return toast("Password too short.");
 
-  s.pageTemplate = (templateInput.value || "").trim() || defaultSettings.pageTemplate;
+  const users = loadUsers();
+  if(users[username]) return toast("Username already exists.");
 
-  saveSettings(s);
-  currentPage = s.startPage;
-  toast("Saved.");
+  users[username] = {
+    username, displayName,
+    passHash: await sha256(password),
+    role,
+    showOnLeaderboard,
+    totalDays: 0,
+    streak: 0,
+    lastDone: null,
+    createdAt: Date.now()
+  };
+  saveUsers(users);
+
+  $("newUser").value=""; $("newName").value=""; $("newPass").value="";
+  $("newRole").value="Member"; $("newShowLB").checked=true;
+
+  toast("User created.");
   renderAll();
 }
 
-async function adminSetPassword(username, newPass){
+async function adminResetPassword(username, newPass){
   const g = adminGuard();
   if(!g.ok) return toast(g.msg);
 
@@ -1008,12 +663,92 @@ async function adminSetPassword(username, newPass){
   users[username].passHash = await sha256(newPass);
   saveUsers(users);
   toast("Password updated.");
+  renderAll();
+}
+
+function adminSetRole(username, role){
+  const g = adminGuard();
+  if(!g.ok) return toast(g.msg);
+  if(username === ADMIN_USERNAME) return toast("Main admin role locked.");
+
+  const users = loadUsers();
+  if(!users[username]) return toast("User not found.");
+  users[username].role = (role==="Admin") ? "Admin" : "Member";
+  saveUsers(users);
+  toast("Role updated.");
+  renderAll();
+}
+
+function adminSetShowLB(username, show){
+  const g = adminGuard();
+  if(!g.ok) return toast(g.msg);
+
+  const users = loadUsers();
+  if(!users[username]) return toast("User not found.");
+  users[username].showOnLeaderboard = !!show;
+  saveUsers(users);
+  toast("Saved.");
+  renderAll();
+}
+
+function adminSetDays(username, days){
+  const g = adminGuard();
+  if(!g.ok) return toast(g.msg);
+
+  const n = Number(days);
+  if(!Number.isFinite(n) || n < 0) return toast("Enter valid days.");
+
+  const users = loadUsers();
+  if(!users[username]) return toast("User not found.");
+  users[username].totalDays = Math.floor(n);
+  saveUsers(users);
+  toast("Days set.");
+  renderAll();
+}
+
+function adminAdjustDays(username, delta){
+  const g = adminGuard();
+  if(!g.ok) return toast(g.msg);
+
+  const users = loadUsers();
+  if(!users[username]) return toast("User not found.");
+  users[username].totalDays = Math.max(0, (users[username].totalDays||0) + delta);
+  saveUsers(users);
+  toast("Days updated.");
+  renderAll();
+}
+
+function adminRenameUser(oldU, newU){
+  const g = adminGuard();
+  if(!g.ok) return toast(g.msg);
+
+  if(oldU === ADMIN_USERNAME) return toast("Can't rename main admin.");
+  newU = normalizeUsername(newU);
+  if(!newU || newU.length < 3) return toast("New username too short.");
+
+  const users = loadUsers();
+  if(!users[oldU]) return toast("User not found.");
+  if(users[newU]) return toast("New username exists.");
+
+  const obj = users[oldU];
+  delete users[oldU];
+  obj.username = newU;
+  users[newU] = obj;
+  saveUsers(users);
+
+  const sess = loadSession();
+  if(sess.username === oldU) saveSession({username:newU});
+
+  toast("Username renamed.");
+  renderAll();
 }
 
 function adminDeleteUser(username){
   const g = adminGuard();
   if(!g.ok) return toast(g.msg);
   if(username === ADMIN_USERNAME) return toast("Can't delete main admin.");
+
+  if(!confirm(`Delete @${username}?`)) return;
 
   const users = loadUsers();
   delete users[username];
@@ -1026,140 +761,117 @@ function adminDeleteUser(username){
   renderAll();
 }
 
-function adminAdjustDays(username, delta){
-  const g = adminGuard();
-  if(!g.ok) return toast(g.msg);
-
-  const users = loadUsers();
-  const x = users[username];
-  if(!x) return toast("User not found.");
-  x.totalDays = Math.max(0, (x.totalDays||0) + delta);
-  users[username] = x;
-  saveUsers(users);
-
-  toast("Days updated.");
-  renderAll();
-}
-
-function adminSetDays(username, days){
-  const g = adminGuard();
-  if(!g.ok) return toast(g.msg);
-
-  const n = Number(days);
-  if(Number.isNaN(n) || n < 0) return toast("Enter valid days.");
-
-  const users = loadUsers();
-  const x = users[username];
-  if(!x) return toast("User not found.");
-  x.totalDays = Math.floor(n);
-  users[username] = x;
-  saveUsers(users);
-
-  toast("Days set.");
-  renderAll();
-}
-
-function adminSetRole(username, role){
-  const g = adminGuard();
-  if(!g.ok) return toast(g.msg);
-  if(username === ADMIN_USERNAME) return toast("Main admin role locked.");
-
-  const users = loadUsers();
-  const u = users[username];
-  if(!u) return toast("User not found.");
-
-  u.role = (role === "Admin") ? "Admin" : "Member";
-  users[username] = u;
-  saveUsers(users);
-
-  toast("Role updated.");
-  renderAll();
-}
-
 function renderAdminUsers(){
-  const wrap = document.getElementById("adminUsers");
-  const u = getCurrentUser();
-  if(isLocked()){
-    wrap.innerHTML = `<p class="text-gray-400 italic">Read-only mode. Admin disabled.</p>`;
-    return;
-  }
-  if(!u || u.role !== "Admin"){
-    wrap.innerHTML = `<p class="text-gray-400 italic">Admins only.</p>`;
-    return;
-  }
-
   const users = loadUsers();
-  const list = Object.values(users).sort((a,b)=> (a.username||"").localeCompare(b.username||""));
+  const list = Object.values(users).sort((a,b)=>(a.username||"").localeCompare(b.username||""));
 
-  wrap.innerHTML = list.map(user=>{
-    const isMain = user.username === ADMIN_USERNAME;
-    const uname = escapeHTML(user.username);
+  $("adminUsers").innerHTML = list.map(u=>{
+    const isMain = u.username === ADMIN_USERNAME;
+    const showLB = u.showOnLeaderboard !== false;
 
     return `
-      <div class="border border-gray-100 rounded-3xl p-4">
+      <div class="border border-gray-100 rounded-2xl p-4">
         <div class="flex items-start justify-between gap-3">
           <div>
-            <div class="font-extrabold text-gray-800">
-              ${escapeHTML(user.displayName)} <span class="text-gray-400 font-bold">@${uname}</span>
-              <span class="ml-2 text-xs font-extrabold px-2 py-1 rounded-full ${user.role==="Admin" ? "bg-red-50 text-red-700 border border-red-200" : "bg-gray-50 text-gray-700 border border-gray-200"}">
-                ${user.role || "Member"}
+            <div class="font-black text-gray-900">
+              ${escapeHtml(u.displayName)}
+              <span class="text-gray-400 font-extrabold">@${escapeHtml(u.username)}</span>
+              <span class="badge ${u.role==="Admin"?"bg-red-50 text-red-700 border border-red-200":"bg-gray-50 text-gray-700 border border-gray-200"}">
+                ${escapeHtml(u.role||"Member")}
+              </span>
+              <span class="badge ${showLB?"bg-green-50 text-green-800 border border-green-200":"bg-gray-50 text-gray-700 border border-gray-200"}">
+                LB ${showLB?"ON":"OFF"}
               </span>
             </div>
             <div class="text-xs text-gray-500 mt-1">
-              Total: <b class="text-green-700">${user.totalDays||0}</b> • Streak: <b class="text-green-700">${user.streak||0}</b> • Last: <b>${user.lastDone||"—"}</b>
+              Total <b class="text-green-800">${u.totalDays||0}</b> • Streak <b class="text-green-800">${u.streak||0}</b> • Last <b>${escapeHtml(u.lastDone||"—")}</b>
             </div>
           </div>
-          ${isMain ? `` : `
-            <button onclick="adminDeleteUser('${uname}')"
-              class="shrink-0 text-sm font-extrabold px-3 py-2 rounded-2xl bg-red-50 text-red-700 border border-red-200 hover:bg-red-100">
+
+          ${isMain ? "" : `
+            <button class="btn bg-red-50 text-red-700 border border-red-200" onclick="adminDeleteUser('${escapeHtml(u.username)}')">
               Delete
             </button>
           `}
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-3 mt-4">
+
           <div>
-            <label class="block text-xs font-bold text-gray-500 mb-1">Role</label>
-            <select id="role_${uname}" class="w-full border p-3 rounded-xl focus:outline-green-600" ${isMain ? "disabled" : ""}>
-              <option value="Member" ${user.role!=="Admin" ? "selected" : ""}>Member</option>
-              <option value="Admin" ${user.role==="Admin" ? "selected" : ""}>Admin</option>
+            <div class="text-xs font-black text-gray-500 mb-1">Role</div>
+            <select id="role_${u.username}" class="input" ${isMain?"disabled":""}>
+              <option value="Member" ${u.role!=="Admin"?"selected":""}>Member</option>
+              <option value="Admin" ${u.role==="Admin"?"selected":""}>Admin</option>
             </select>
-            <button ${isMain ? "disabled" : ""} onclick="adminSetRole('${uname}', document.getElementById('role_${uname}').value)"
-              class="mt-2 w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-2xl font-bold transition ${isMain ? "opacity-50 cursor-not-allowed" : ""}">
-              Set Role
+            <button class="btn bg-gray-100 text-gray-800 w-full mt-2 ${isMain?"opacity-50 cursor-not-allowed":""}"
+              ${isMain?"disabled":""}
+              onclick="adminSetRole('${escapeHtml(u.username)}', document.getElementById('role_${u.username}').value)">
+              Set
             </button>
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-gray-500 mb-1">New password</label>
-            <input id="pw_${uname}" class="w-full border p-3 rounded-xl focus:outline-green-600" type="password" placeholder="Enter new password">
-            <button onclick="adminSetPassword('${uname}', document.getElementById('pw_${uname}').value)"
-              class="mt-2 w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-2xl font-bold transition">
-              Change Password
+            <div class="text-xs font-black text-gray-500 mb-1">Show on leaderboard</div>
+            <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 flex items-center justify-between">
+              <div class="font-black text-gray-700">${showLB?"Visible":"Hidden"}</div>
+              <input id="lb_${u.username}" type="checkbox" class="scale-125" ${showLB?"checked":""}>
+            </div>
+            <button class="btn bg-gray-100 text-gray-800 w-full mt-2"
+              onclick="adminSetShowLB('${escapeHtml(u.username)}', document.getElementById('lb_${u.username}').checked)">
+              Save
             </button>
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-gray-500 mb-1">Set / Adjust Days</label>
-            <input id="set_${uname}" class="w-full border p-3 rounded-xl focus:outline-green-600" inputmode="numeric" placeholder="e.g. 15">
-            <div class="mt-2 grid grid-cols-5 gap-2">
-              <button onclick="adminSetDays('${uname}', document.getElementById('set_${uname}').value)"
-                class="col-span-2 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-2xl font-bold transition">Set</button>
-              <button onclick="adminAdjustDays('${uname}', 1)"
-                class="bg-green-50 hover:bg-green-100 text-green-800 py-3 rounded-2xl font-bold border border-green-200">+1</button>
-              <button onclick="adminAdjustDays('${uname}', -1)"
-                class="bg-red-50 hover:bg-red-100 text-red-700 py-3 rounded-2xl font-bold border border-red-200">-1</button>
-              <button onclick="adminAdjustDays('${uname}', 7)"
-                class="bg-green-50 hover:bg-green-100 text-green-800 py-3 rounded-2xl font-bold border border-green-200">+7</button>
+            <div class="text-xs font-black text-gray-500 mb-1">Reset password</div>
+            <input id="pw_${u.username}" class="input" placeholder="New password" type="password">
+            <button class="btn bg-gray-100 text-gray-800 w-full mt-2"
+              onclick="adminResetPassword('${escapeHtml(u.username)}', document.getElementById('pw_${u.username}').value)">
+              Update
+            </button>
+          </div>
+
+          <div>
+            <div class="text-xs font-black text-gray-500 mb-1">Set total days</div>
+            <input id="days_${u.username}" class="input" placeholder="e.g. 12" inputmode="numeric">
+            <div class="grid grid-cols-3 gap-2 mt-2">
+              <button class="btn bg-gray-100 text-gray-800" onclick="adminSetDays('${escapeHtml(u.username)}', document.getElementById('days_${u.username}').value)">Set</button>
+              <button class="btn bg-green-50 text-green-800 border border-green-200" onclick="adminAdjustDays('${escapeHtml(u.username)}', 1)">+1</button>
+              <button class="btn bg-red-50 text-red-700 border border-red-200" onclick="adminAdjustDays('${escapeHtml(u.username)}', -1)">-1</button>
             </div>
           </div>
+
+          <div>
+            <div class="text-xs font-black text-gray-500 mb-1">Rename username</div>
+            <input id="ren_${u.username}" class="input" placeholder="New username" ${isMain?"disabled":""}>
+            <button class="btn bg-gray-100 text-gray-800 w-full mt-2 ${isMain?"opacity-50 cursor-not-allowed":""}"
+              ${isMain?"disabled":""}
+              onclick="adminRenameUser('${escapeHtml(u.username)}', document.getElementById('ren_${u.username}').value)">
+              Rename
+            </button>
+          </div>
+
         </div>
       </div>
     `;
   }).join("");
 }
 
-async function exportData(){
+function renderAdmin(){
+  const g = adminGuard();
+  if(!g.ok){
+    toast(g.msg);
+    showView("home");
+    return;
+  }
+  fillAdminSettings();
+  renderAdminUsers();
+}
+
+/* =========================
+   EXPORT / WIPE
+========================= */
+async function exportJSON(){
   const data = { settings: loadSettings(), users: loadUsers() };
   const text = JSON.stringify(data, null, 2);
   try{
@@ -1171,212 +883,107 @@ async function exportData(){
 }
 
 function wipeAll(){
-  const u = getCurrentUser();
-  if(isLocked()) return toast("Read-only mode.");
-  if(!u || u.role !== "Admin") return toast("Admins only.");
-  if(!confirm("Wipe ALL app data? This cannot be undone.")) return;
+  const g = adminGuard();
+  if(!g.ok) return toast(g.msg);
+  if(!confirm("Wipe ALL app data?")) return;
+
   localStorage.removeItem(KEY_USERS);
   localStorage.removeItem(KEY_SESSION);
   localStorage.removeItem(KEY_SETTINGS);
   location.reload();
 }
 
-/* ======================
-   PDF / Print
-====================== */
-function buildPdfData(){
-  const settings = loadSettings();
-  const me = getCurrentUser();
-  const name = me ? me.displayName : "Guest";
-  const topN = Math.max(1, Number(settings.topN) || 10);
-  const show = !!settings.showLeaderboard;
+/* =========================
+   RENDER UI
+========================= */
+function renderTopUI(){
+  const s = loadSettings();
+  $("appTitle").textContent = s.appName;
+  document.title = s.appName;
 
-  document.getElementById("pdfGreeting").textContent = `As-salaamu alaikum, ${name}`;
-  document.getElementById("pdfEventLine").textContent = `Event: ${settings.eventName} • Target: ${settings.targetDateTime}`;
-
-  // Leaderboard block
-  document.getElementById("pdfLeaderboardBlock").classList.toggle("hidden", !show);
-
-  const pdfList = document.getElementById("pdfLeaderboard");
-  pdfList.innerHTML = "";
-
-  if(show){
-    const sorted = getSortedUsers();
-    const top = sorted.slice(0, topN);
-
-    pdfList.innerHTML = top.map((u,i)=>{
-      const hasStreak = (u.streak||0) >= 2;
-      const nameStyle = hasStreak ? "text-red-600 font-extrabold" : "text-gray-900 font-bold";
-      const flame = hasStreak ? " 🔥" : "";
-      return `
-        <div class="flex justify-between items-center p-3 rounded-xl border border-gray-100">
-          <div>
-            <span class="text-gray-500 font-bold">${i+1}.</span>
-            <span class="${nameStyle} ml-2">${escapeHTML(u.displayName)}${flame}</span>
-            <span class="text-xs text-gray-500 ml-2">@${escapeHTML(u.username)}</span>
-          </div>
-          <div class="font-extrabold text-green-800">${u.totalDays||0} Days</div>
-        </div>
-      `;
-    }).join("");
-  }
-
-  // Your rank block
-  const rankBlock = document.getElementById("pdfYourRankBlock");
-  const rankText = document.getElementById("pdfYourRank");
-
-  if(me){
-    const rank = computeRank(me.username);
-    if(rank !== null){
-      const msg = (rank <= topN)
-        ? `You are in the Top ${topN}: #${rank}`
-        : `Your place is #${rank}`;
-      rankText.textContent = msg;
-      rankBlock.classList.remove("hidden");
-    } else {
-      rankBlock.classList.add("hidden");
-    }
-  } else {
-    rankText.textContent = `Login to see your place`;
-    rankBlock.classList.remove("hidden");
-  }
-}
-
-function openPdfViewAndPrint(){
-  buildPdfData();
-  // show pdf page briefly (still hidden in normal view, but print will show it)
-  window.print();
-}
-
-/* ======================
-   Render UI
-====================== */
-function renderAuthUI(){
-  const settings = loadSettings();
-  const me = getCurrentUser();
-
-  // App name in title + nav
-  document.title = settings.appName;
-  document.getElementById("navTitle").textContent = settings.appName;
-
-  // Lockdown state
+  const me = currentUser();
   const locked = isLocked();
-  document.getElementById("lockdownBanner").classList.toggle("hidden", !locked);
 
-  // Show/hide auth buttons
-  document.getElementById("authBtnTop").classList.toggle("hidden", !!me || locked);
-  document.getElementById("authBtnMenu").classList.toggle("hidden", !!me || locked);
-  document.getElementById("logoutBtn").classList.toggle("hidden", !me || locked);
+  $("lockedBanner").classList.toggle("hidden", !locked);
 
-  // Admin nav
-  document.getElementById("adminNavBtn").classList.toggle("hidden", !(me && me.role === "Admin") || locked);
+  // buttons
+  $("loginBtnTop").classList.toggle("hidden", !!me || locked);
+  $("logoutBtnTop").classList.toggle("hidden", !me || locked);
 
-  // Menu hint
-  document.getElementById("menuHint").textContent = me ? `Logged in as ${me.displayName}` : (locked ? "Read-only mode" : "Login to start");
+  $("loginBtnMenu").classList.toggle("hidden", !!me || locked);
+  $("logoutBtnMenu").classList.toggle("hidden", !me || locked);
 
-  // Home progress blocks
-  document.getElementById("guestPrompt").classList.toggle("hidden", !!me || locked);
-  document.getElementById("userStats").classList.toggle("hidden", !me || locked);
-  document.getElementById("lockedPromptHome").classList.toggle("hidden", !locked);
+  $("adminMenuBtn").classList.toggle("hidden", !(me && me.role==="Admin") || locked);
 
-  // Counting page blocks
-  document.getElementById("countingGuest").classList.toggle("hidden", !!me || locked);
-  document.getElementById("countingUser").classList.toggle("hidden", !me || locked);
-  document.getElementById("countingLocked").classList.toggle("hidden", !locked);
+  $("menuHint").textContent = me ? `Logged in as ${me.displayName}` : (locked ? "Read-only mode" : "Login to start");
 
-  // Admin locked message + disable buttons
-  document.getElementById("adminLockedMsg").classList.toggle("hidden", !locked);
-  if(locked){
-    ["saveTopBtn","saveQBtn"].forEach(id=>{
-      const b = document.getElementById(id);
-      if(b){ b.disabled = true; b.classList.add("opacity-50","cursor-not-allowed"); }
-    });
-  } else {
-    ["saveTopBtn","saveQBtn"].forEach(id=>{
-      const b = document.getElementById(id);
-      if(b){ b.disabled = false; b.classList.remove("opacity-50","cursor-not-allowed"); }
-    });
+  $("whoBox").classList.toggle("hidden", !me);
+  if(me) $("whoBox").textContent = `${me.displayName} (${me.role})`;
+
+  // home/count visibility
+  $("homeGuest").classList.toggle("hidden", !!me || locked);
+  $("homeUser").classList.toggle("hidden", !me || locked);
+
+  $("countGuest").classList.toggle("hidden", !!me || locked);
+  $("countUser").classList.toggle("hidden", !me || locked);
+
+  // disable done button when locked
+  $("doneBtn").disabled = locked;
+  $("doneBtn").classList.toggle("opacity-50", locked);
+  $("doneBtn").classList.toggle("cursor-not-allowed", locked);
+
+  // fill user stats
+  if(me && !locked){
+    $("homeName").textContent = me.displayName;
+    $("homeStreak").textContent = me.streak || 0;
+    $("homeTotal").textContent = me.totalDays || 0;
+
+    $("homeOrdinal").textContent = `This is your ${ordinal((me.totalDays||0))} day.`;
+    $("countStatus").textContent = alreadyDoneToday(me) ? "Already completed today ✅" : "Not completed today";
+    $("countOrdinal").textContent = `Total completed days: ${me.totalDays||0}`;
+  }
+}
+
+function updateCountdown(){
+  const s = loadSettings();
+  $("countTitle").textContent = `Days till: ${s.eventName}`;
+  $("countTarget").textContent = `Target: ${s.targetDateTime}`;
+
+  const target = parseTargetDateTime(s.targetDateTime);
+  const dist = target - Date.now();
+
+  if(dist <= 0){
+    $("d").textContent="00"; $("h").textContent="00"; $("m").textContent="00"; $("s").textContent="00";
+    return;
   }
 
-  // Dynamic label for buttons (from Preview title)
-  const label = getRecitationLabel();
-  document.getElementById("quranTitle").textContent = label;
+  const dd = Math.floor(dist/(1000*60*60*24));
+  const hh = Math.floor((dist%(1000*60*60*24))/(1000*60*60));
+  const mm = Math.floor((dist%(1000*60*60))/(1000*60));
+  const ss = Math.floor((dist%(1000*60))/1000);
 
-  if(!me || locked) return;
-
-  // User details
-  document.getElementById("displayName").textContent = me.displayName;
-  document.getElementById("streakCount").textContent = me.streak || 0;
-
-  const done = alreadyDoneToday(me);
-  const btns = [document.getElementById("markDoneBtn"), document.getElementById("countBtn")];
-
-  btns.forEach(b=>{
-    if(done){
-      b.innerText = "Already Completed Today! ✨";
-      b.disabled = true;
-      b.className = "w-full bg-gray-300 text-gray-600 py-4 rounded-2xl font-bold cursor-not-allowed";
-    } else {
-      b.innerText = `I Recited ${label} Today`;
-      b.disabled = false;
-      b.className = "w-full bg-green-600 text-white py-4 rounded-2xl font-bold hover:bg-green-700 transition";
-    }
-  });
-
-  const total = me.totalDays || 0;
-  document.getElementById("ordinalLine").textContent =
-    total > 0 ? `This is your ${ordinal(total)} day.` : `This is your 0th day (press the button to start).`;
-
-  document.getElementById("countStatus").textContent = done ? "Completed today ✅" : "Not completed yet";
-  document.getElementById("countOrdinal").textContent = total > 0 ? `Your ${ordinal(total)} day` : `Your 0th day`;
+  $("d").textContent = String(dd).padStart(2,"0");
+  $("h").textContent = String(hh).padStart(2,"0");
+  $("m").textContent = String(mm).padStart(2,"0");
+  $("s").textContent = String(ss).padStart(2,"0");
 }
 
 function renderAll(){
-  renderAuthUI();
-  updateCountdown();
+  renderTopUI();
   renderLeaderboard();
-
-  // Quran rendering should happen only if user opens counting page,
-  // but it's okay to keep it synced
-  const s = loadSettings();
-  if(currentPage === null) currentPage = s.startPage;
-  renderQuran(false);
-
-  // Admin list
-  renderAdminUsers();
+  updateCountdown();
 }
 
-/* ======================
-   Wiring
-====================== */
-document.getElementById("searchBox").addEventListener("input", renderLeaderboard);
-window.addEventListener("resize", ()=> renderQuran(false));
-wireSwipe();
+$("lbSearch").addEventListener("input", renderLeaderboard);
 
-/* ======================
-   Boot
-====================== */
+/* =========================
+   BOOT
+========================= */
 (async function boot(){
-  // init settings
-  const s = loadSettings();
-  saveSettings(s);
-
   await ensureAdmin();
-
-  // start countdown loop
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
-
-  // init Quran paging
-  currentPage = loadSettings().startPage;
-
   renderAll();
+  setInterval(updateCountdown, 1000);
 })();
-
-/* ======================
-   PDF only (lockdown entry)
-   If locked, keep user on home and encourage PDF
-====================== */
 </script>
 </body>
 </html>
