@@ -1,19 +1,13 @@
-<!DOCTYPE!>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Baqarah Counter 🌙</title>
+<!DOCTYPE html!>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://blnvdbgimubzdarsdupg.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJsbnZkYmdpbXViemRhcnNkdXBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4NDA5OTksImV4cCI6MjA4NTQxNjk5OX0.5pGqkAMe_m0FvXKEBX_4ADaU8xKssqJtOL7rMpSdVM4";
 
-  const supabase = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
+  // IMPORTANT: name it sb (or anything NOT "supabase")
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 </script>
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
