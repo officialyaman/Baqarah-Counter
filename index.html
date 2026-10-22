@@ -104,9 +104,9 @@
   <div id="lockdownBanner" class="hidden max-w-4xl mx-auto mt-6 px-4">
     <div class="bg-white border border-gray-100 rounded-3xl shadow-sm p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <p class="text-sm font-extrabold text-red-700">Event has started — Members are read-only</p>
+        <p class="text-sm font-extrabold text-red-700">Event has started — Counting is closed for members</p>
         <p class="text-gray-600 text-sm">
-          Members can’t login/sign up/count anymore. Admin can still manage everything.
+          Members can still log in and view progress. Counting and new sign-ups are closed. Admin can still manage everything.
         </p>
       </div>
       <button onclick="openPdfViewAndPrint()" class="bg-green-700 hover:bg-green-800 text-white px-5 py-3 rounded-2xl font-bold">
@@ -690,8 +690,7 @@ async function login(username, password){
   const h = await sha256(password);
   if(h !== u.passHash) return toast("Wrong password.");
 
-  // Allow Admin login always, allow member login only if not locked
-  if(u.role !== "Admin" && isEventLocked()) return toast("Event started: members can’t login now.");
+  // Login stays available after the event; counting remains read-only for members.
 
   saveSession({username});
   closeAuthModal();
@@ -1340,24 +1339,24 @@ function renderAuthUI(){
 
   // buttons
   const isAdmin = me && me.role === "Admin";
-  document.getElementById("authBtnTop").classList.toggle("hidden", !!me || locked);
-  document.getElementById("authBtnMenu").classList.toggle("hidden", !!me || locked);
+  document.getElementById("authBtnTop").classList.toggle("hidden", !!me);
+  document.getElementById("authBtnMenu").classList.toggle("hidden", !!me);
   document.getElementById("logoutBtn").classList.toggle("hidden", !me);
 
   document.getElementById("adminNavBtn").classList.toggle("hidden", !(me && me.role === "Admin"));
 
   document.getElementById("menuHint").textContent =
-    me ? `Logged in as ${me.displayName}` : (locked ? "Members read-only" : "Login to start");
+    me ? `Logged in as ${me.displayName}` : (locked ? "Login to view your progress (read-only)" : "Login to start");
 
   // Home blocks
   document.getElementById("guestPrompt").classList.toggle("hidden", !!me || locked);
-  document.getElementById("userStats").classList.toggle("hidden", !me || (locked && !isAdmin));
-  document.getElementById("lockedPromptHome").classList.toggle("hidden", !locked);
+  document.getElementById("userStats").classList.toggle("hidden", !me);
+  document.getElementById("lockedPromptHome").classList.toggle("hidden", !locked || !!me);
 
   // Counting blocks
   document.getElementById("countingGuest").classList.toggle("hidden", !!me || locked);
-  document.getElementById("countingUser").classList.toggle("hidden", !me || (locked && !isAdmin));
-  document.getElementById("countingLocked").classList.toggle("hidden", !locked);
+  document.getElementById("countingUser").classList.toggle("hidden", !me);
+  document.getElementById("countingLocked").classList.toggle("hidden", !locked || !!me);
 
   const label = getRecitationLabel();
   document.getElementById("quranTitle").textContent = label;
