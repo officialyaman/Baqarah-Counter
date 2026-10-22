@@ -1,12 +1,18 @@
-<!DOCTYPE html!>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const SUPABASE_URL = "https://blnvdbgimubzdarsdupg.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJsbnZkYmdpbXViemRhcnNkdXBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4NDA5OTksImV4cCI6MjA4NTQxNjk5OX0.5pGqkAMe_m0FvXKEBX_4ADaU8xKssqJtOL7rMpSdVM4";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://blnvdbgimubzdarsdupg.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJsbnZkYmdpbXViemRhcnNkdXBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4NDA5OTksImV4cCI6MjA4NTQxNjk5OX0.5pGqkAMe_m0FvXKEBX_4ADaU8xKssqJtOL7rMpSdVM4";
+  
+    // IMPORTANT: name it sb (or anything NOT "supabase")
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
 
-  // IMPORTANT: name it sb (or anything NOT "supabase")
-  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baqarah Counter</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -178,7 +184,7 @@
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
       <h3 id="leaderboardTitle" class="text-xl font-bold mb-4 text-gray-700">
         <i class="fa-solid fa-trophy ramadan-gold"></i>
-        Global Leaderboard
+        Leaderboard
       </h3>
 
       <input id="searchBox" class="w-full border p-3 rounded-xl mb-4 focus:outline-green-600"
@@ -455,7 +461,7 @@ const KEY_SETTINGS = "baq_settings_v2";
 const defaultSettings = {
   appName: "Baqarah Counter 🌙",
   eventName: "Eid Al Fitr 2027",
-  targetDateTime: "2027-3-10 00:00:00",
+  targetDateTime: "2027-03-10 00:00:00",
 
   showLeaderboard: true,
   topN: 10,
@@ -509,10 +515,13 @@ async function sha256(text){
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
 }
 
-function todayISO(){ return new Date().toISOString().split("T")[0]; }
+function localDateISO(d = new Date()) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+function todayISO(){ return localDateISO(); }
 function yesterdayISO(){
   const d = new Date(); d.setDate(d.getDate()-1);
-  return d.toISOString().split("T")[0];
+  return localDateISO(d);
 }
 function ordinal(n){
   const s=["th","st","nd","rd"], v=n%100;
@@ -648,7 +657,7 @@ async function signup(username, displayName, password){
   displayName = (displayName||"").trim();
   password = (password||"").trim();
   if(!username || !displayName || !password) return toast("Fill all fields.");
-  if(username.length < 3) return toast("Username too short.");
+  if(!/^[A-Za-z0-9_]{3,30}$/.test(username)) return toast("Username must be 3–30 letters, numbers, or underscores.");
 
   const users = loadUsers();
   if(users[username]) return toast("Username already exists.");
@@ -682,7 +691,7 @@ async function login(username, password){
   if(h !== u.passHash) return toast("Wrong password.");
 
   // Allow Admin login always, allow member login only if not locked
-  if(u.role !== "Admin" && memberLocked()) return toast("Event started: members can’t login now.");
+  if(u.role !== "Admin" && isEventLocked()) return toast("Event started: members can’t login now.");
 
   saveSession({username});
   closeAuthModal();
@@ -797,12 +806,12 @@ function renderLeaderboard(){
     );
   }
 
-  document.getElementById("leaderboardHiddenMsg").classList.toggle("hidden", show);
+  document.getElementById("leaderboardHiddenMsg").classList.toggle("hidden", !show);
   document.getElementById("leaderboardList").classList.toggle("hidden", !show);
   document.getElementById("searchBox").classList.toggle("hidden", !show);
 
   document.getElementById("leaderboardTitle").innerHTML =
-    `<i class="fa-solid fa-trophy ramadan-gold"></i> Global Leaderboard (Top ${topN})`;
+    `<i class="fa-solid fa-trophy ramadan-gold"></i> Leaderboard (Top ${topN})`;
 
   if(!show){
     document.getElementById("leaderboardList").innerHTML = "";
@@ -1022,7 +1031,7 @@ async function adminCreateUser(){
   const showOnLeaderboard = !!newShow.checked;
 
   if(!username || !displayName || !password) return toast("Fill all fields.");
-  if(username.length < 3) return toast("Username too short.");
+  if(!/^[A-Za-z0-9_]{3,30}$/.test(username)) return toast("Username must be 3–30 letters, numbers, or underscores.");
 
   const users = loadUsers();
   if(users[username]) return toast("Username already exists.");
@@ -1072,7 +1081,7 @@ function adminSetShow(username, checked){
 function adminRenameUser(oldUsername, newUsername){
   if(!requireAdmin()) return;
   newUsername = (newUsername||"").trim();
-  if(newUsername.length < 3) return toast("New username too short.");
+  if(!/^[A-Za-z0-9_]{3,30}$/.test(newUsername)) return toast("Use 3–30 letters, numbers, or underscores.");
 
   const users = loadUsers();
   if(!users[oldUsername]) return toast("User not found.");
